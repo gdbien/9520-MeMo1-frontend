@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import InicioCargaDeHoras from "./CargaDeHoras/InicioCargaDeHoras";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
           <h1> Recrusos </h1>
         </Route>
         <Route path="/hours">
-          <h1> Carga de horas </h1>
+          <InicioCargaDeHoras />
         </Route>
         <Route path="/">
           <h1> Home </h1>
