@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from './Componentes/NavBar'
 import BarraBusqueda from './Componentes/BarraBusqueda'
-import Caja from './Componentes/Caja'
+import TablaEmpleado from './Componentes/TablaEmpleado'
 
 
 //definimos propiedades para un mismo cajon, parece que son dos, pero son dos definiciones
@@ -12,7 +12,7 @@ const InicioCargaDeHoras = () => {
         <div>
             <Navbar />
             <BarraBusqueda />
-            <Caja />
+            <TablaEmpleado />
         </div>
     )
 }
