@@ -12,8 +12,7 @@ function App() {
         <Route path="/resources">
           <h1> Recrusos </h1>
         </Route>
-        <Route path="/hours">
-          <InicioCargaDeHoras />
+        <Route path="/hours" component={InicioCargaDeHoras}>
         </Route>
         <Route path="/">
           <h1> Home </h1>
