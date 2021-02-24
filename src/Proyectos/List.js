@@ -8,7 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Button from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button';
+import TaskList from "./Tasks";
 
 const columns = [
     { id: 'codeId', label: 'ID', minWidth: 100 },
@@ -24,18 +25,19 @@ const useStyles = makeStyles({
         width: '100%',
     },
     container: {
-        maxHeight: 440,
+        maxHeight: '440',
     },
 });
+
 
 export default function ProjectsList() {
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const [rows, setRows] = React.useState([]);
     const [error, setError] = React.useState(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
+    const [rows, setRows] = React.useState([]);
 
     React.useEffect(() => {
         fetch('https://psa-projects.herokuapp.com/projects')
@@ -92,7 +94,9 @@ export default function ProjectsList() {
                                         if(column.id === "taskList") {
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
-                                                    <Button variant="contained" color="primary"> View </Button>
+                                                    <Button onClick={() => { TaskList(row['codeId']) }}
+                                                        variant="contained" color="primary"> View
+                                                    </Button>
                                                 </TableCell>
                                             );
                                         }
