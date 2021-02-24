@@ -39,7 +39,7 @@ import {Typography } from '@material-ui/core'
     },
   });
 
-const TablaProyecto = () => {
+const TablaProyectoTarea = (props) => {
 
         const classes = useStyles();
         const [page, setPage] = React.useState(0);
@@ -56,7 +56,7 @@ const TablaProyecto = () => {
       
         return (
           <Paper className={classes.root}>
-              <Typography variant='body5' className={classes.texto}>Proyectos </Typography>
+              <Typography variant='body5' className={classes.texto}>{props.titulo} </Typography>
             <TableContainer className={classes.container}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -104,4 +104,4 @@ const TablaProyecto = () => {
       }
 
 
-export default TablaProyecto
+export default TablaProyectoTarea

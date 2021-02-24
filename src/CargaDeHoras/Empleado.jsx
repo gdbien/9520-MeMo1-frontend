@@ -1,8 +1,7 @@
 import React from 'react'
 import { makeStyles, Typography, IconButton } from '@material-ui/core'
 import Navbar from './Componentes/NavBar'
-import TablaTarea from './Componentes/TablaTarea'
-import TablaProyecto from './Componentes/TablaProyecto'
+import TablaProyectoTarea from './Componentes/TablaProyectoTarea'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const estilos = makeStyles(theme => ({
@@ -56,11 +55,11 @@ const Empleado = () => {
             </Typography>
 
             <div className={classes.tabla}>
-            <TablaProyecto /> 
+            <TablaProyectoTarea titulo="Proyectos" /> 
             </div>
             
             <div className={classes.tabla2}>
-            <TablaTarea /> 
+            <TablaProyectoTarea titulo="Tareas" /> 
             </div>
         </div>
     )
