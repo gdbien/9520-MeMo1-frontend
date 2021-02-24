@@ -35,7 +35,7 @@ const columns = [
 const useStyles = makeStyles({
   root: {
     marginTop: 80,
-    marginLeft: 100,
+    marginLeft: 200,
     width: '60%',
   },
   container: {
@@ -62,7 +62,6 @@ const TablaEmpleado = () => {
     api.get("/personas")
       .then(res => {
         setData(res.data)
-        console.log(res.data);
       })
       .catch(error => {
         setErrorMessage(["No se pudieron cargar los empleados"])
@@ -82,9 +81,7 @@ const TablaEmpleado = () => {
   const history = useHistory();
 
   const handleRoute = (row) => {
-    console.log(row);
     var id = Object.values(row)[1] + ' ' + Object.values(row)[2];
-    console.log(id)
     history.push({
       pathname: '/hours/empleado',
       state: { detail: id }

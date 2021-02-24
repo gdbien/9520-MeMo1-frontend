@@ -2,20 +2,20 @@ import React from 'react'
 import { makeStyles, Typography, IconButton } from '@material-ui/core'
 import Navbar from './Componentes/NavBar'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import TablaProyecto from './Componentes/TablaProyecto'
 import TablaTarea from './Componentes/TablaTarea'
+import { ProveedorTareas } from './Contexto/ContextoTareas';
 
 const estilos = makeStyles(theme => ({
     tabla: {
         marginTop: 20,
-        marginLeft: 350,
+        marginLeft: 150,
         float: 'left',
     },
     tabla2: {
         marginTop: 20,
-        marginRight: 350,
+        marginRight: 150,
         float: 'right',
     },
     texto1: {
@@ -41,7 +41,7 @@ const Empleado = (props) => {
     const location = useLocation();
 
     return (
-        
+        <ProveedorTareas>
         <div>
             <Navbar/>
             <Typography variant='h5' className={classes.texto1}>
@@ -61,13 +61,14 @@ const Empleado = (props) => {
             </Typography>
 
             <div className={classes.tabla}>
-            <TablaProyecto /> 
+            <TablaProyecto titulo='Proyectos'/> 
             </div>
             
             <div className={classes.tabla2}>
-            <TablaTarea /> 
+            <TablaTarea titulo='Tareas'/> 
             </div>
         </div>
+        </ProveedorTareas>
     )
 }
 export default Empleado

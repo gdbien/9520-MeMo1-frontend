@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { Typography } from '@material-ui/core'
+import { ContextoTareas } from '../Contexto/ContextoTareas';
 
 const columns = [
   {
@@ -26,21 +27,12 @@ const columns = [
   },
 ];
 
-// function createData(codigo, nombre) {
-//   return { codigo, nombre };
-// }
-
-// const rows = [
-//   createData(201, 'Cloud Spring ERP'),
-//   createData(300, 'Backend'),
-//   createData(400, 'Frontend'),
-// ];
-
 const useStyles = makeStyles({
   root: {
     marginTop: 80,
-    marginLeft: 100,
-    width: '80%',
+    marginLeft: 50,
+    marginRight: 0,
+    width: '125%',
   },
   container: {
     maxHeight: 440,
@@ -53,6 +45,9 @@ const useStyles = makeStyles({
 
 
 const TablaTarea = (props) => {
+
+  const { dataNueva } = useContext(ContextoTareas);
+
   var idProyecto = null;
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
@@ -68,24 +63,26 @@ const TablaTarea = (props) => {
   })
 
   function setIdProyecto(id) {
+    console.log(id);
     idProyecto = id;
   }
 
   React.useEffect(() => {
+    console.log(dataNueva)
+    setIdProyecto(dataNueva);
     if (idProyecto) {
       var url = "/projects/project?id=" + idProyecto;
+      console.log(url);
       api.get(url)
         .then(res => {
           setData(res.data.tasksList)
-          console.log(res.data);
         })
         .catch(error => {
           setErrorMessage(["No se pudieron cargar las tareas"])
           setIserror(true)
         })
     }
-
-  }, [])
+  })
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

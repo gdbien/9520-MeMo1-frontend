@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { Typography } from '@material-ui/core'
-import TablaTarea from './TablaTarea';
+import { ContextoTareas } from '../Contexto/ContextoTareas';
 
 const columns = [
   {
@@ -27,21 +27,12 @@ const columns = [
   },
 ];
 
-// function createData(codigo, nombre) {
-//   return { codigo, nombre };
-// }
-
-// const rows = [
-//   createData(201, 'Cloud Spring ERP'),
-//   createData(300, 'Backend'),
-//   createData(400, 'Frontend'),
-// ];
-
 const useStyles = makeStyles({
   root: {
     marginTop: 80,
-    marginLeft: 100,
-    width: '80%',
+    marginLeft: 0,
+    marginRight: 0,
+    width: '125%',
   },
   container: {
     maxHeight: 440,
@@ -53,7 +44,10 @@ const useStyles = makeStyles({
 
 
 
-const TablaProyectoTarea = (props) => {
+const TablaProyecto = (props) => {
+
+  const { dataNueva, setDataNueva } = useContext(ContextoTareas);
+
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -71,7 +65,6 @@ const TablaProyectoTarea = (props) => {
     api.get("/projects")
       .then(res => {
         setData(res.data)
-        console.log(res.data);
       })
       .catch(error => {
         setErrorMessage(["No se pudieron cargar los proyectos"])
@@ -89,15 +82,13 @@ const TablaProyectoTarea = (props) => {
   };
 
   const handleClick = (row) => {
-    console.log(row);
-
-    // var id = Object.values(row)[1] + ' ' + Object.values(row)[2];
-    // console.log(id)
+    var id = Object.values(row)[0];
+    setDataNueva(id);
   };
 
   return (
     <Paper className={classes.root}>
-      <Typography variant='body2' className={classes.texto}>{"Proyectos"} </Typography>
+      <Typography variant='body2' className={classes.texto}>{props.titulo} </Typography>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -145,4 +136,4 @@ const TablaProyectoTarea = (props) => {
 }
 
 
-export default TablaProyectoTarea
+export default TablaProyecto
