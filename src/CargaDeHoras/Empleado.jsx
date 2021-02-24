@@ -5,6 +5,7 @@ import TablaTarea from './Componentes/TablaTarea'
 import TablaProyecto from './Componentes/TablaProyecto'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+
 const estilos = makeStyles(theme => ({
     tabla: {
         marginTop: -20,
@@ -31,6 +32,12 @@ const estilos = makeStyles(theme => ({
     },
 
 }))
+
+
+const api = axios.create({
+    baseURL: `https://psa-bac-carga-de-horas.herokuapp.com`
+  })
+  
 
 const Empleado = () => {
     const classes = estilos();
