@@ -9,46 +9,51 @@ import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
-import { useHistory } from "react-router-dom";
+import { Typography } from '@material-ui/core'
 
 const columns = [
   {
-    id: 'numLegajo',
-    label: 'Legajo N°',
+    id: 'taskId',
+    label: 'Código',
     minWidth: 50,
     align: 'center'
   },
   {
-    id: 'nombre',
-    label: 'Nombres',
+    id: 'name',
+    label: 'Nombre',
     minWidth: 100,
     align: 'center'
   },
-  {
-    id: 'apellido',
-    label: 'Apellidos',
-    minWidth: 100,
-    align: 'center',
-  },
 ];
+
+// function createData(codigo, nombre) {
+//   return { codigo, nombre };
+// }
+
+// const rows = [
+//   createData(201, 'Cloud Spring ERP'),
+//   createData(300, 'Backend'),
+//   createData(400, 'Frontend'),
+// ];
 
 const useStyles = makeStyles({
   root: {
     marginTop: 80,
     marginLeft: 100,
-    width: '60%',
+    width: '80%',
   },
   container: {
     maxHeight: 440,
   },
+  texto: {
+    fontWeight: 600,
+  },
 });
 
-const api = axios.create({
-  baseURL: `https://psa-bac-carga-de-horas.herokuapp.com`
-})
 
-const TablaEmpleado = () => {
 
+const TablaTarea = (props) => {
+  var idProyecto = null;
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -58,16 +63,28 @@ const TablaEmpleado = () => {
   const [iserror, setIserror] = React.useState(false)
   const [errorMessages, setErrorMessage] = React.useState([])
 
+  const api = axios.create({
+    baseURL: `http://psa-projects.herokuapp.com/`
+  })
+
+  function setIdProyecto(id) {
+    idProyecto = id;
+  }
+
   React.useEffect(() => {
-    api.get("/personas")
-      .then(res => {
-        setData(res.data)
-        console.log(res.data);
-      })
-      .catch(error => {
-        setErrorMessage(["No se pudieron cargar los empleados"])
-        setIserror(true)
-      })
+    if (idProyecto) {
+      var url = "/projects/project?id=" + idProyecto;
+      api.get(url)
+        .then(res => {
+          setData(res.data.tasksList)
+          console.log(res.data);
+        })
+        .catch(error => {
+          setErrorMessage(["No se pudieron cargar las tareas"])
+          setIserror(true)
+        })
+    }
+
   }, [])
 
   const handleChangePage = (event, newPage) => {
@@ -79,20 +96,9 @@ const TablaEmpleado = () => {
     setPage(0);
   };
 
-  const history = useHistory();
-
-  const handleRoute = (row) => {
-    console.log(row);
-    var id = Object.values(row)[1] + ' ' + Object.values(row)[2];
-    console.log(id)
-    history.push({
-      pathname: '/hours/empleado',
-      state: { detail: id }
-    })
-  }
-
   return (
     <Paper className={classes.root}>
+      <Typography variant='body2' className={classes.texto}>{props.titulo} </Typography>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -111,7 +117,7 @@ const TablaEmpleado = () => {
           <TableBody>
             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.numLegajo} onClick={() => handleRoute(row)}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.taskId}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -140,4 +146,4 @@ const TablaEmpleado = () => {
 }
 
 
-export default TablaEmpleado
+export default TablaTarea
