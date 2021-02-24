@@ -3,6 +3,8 @@ import { makeStyles, Typography, IconButton } from '@material-ui/core'
 import Navbar from './Componentes/NavBar'
 import TablaProyectoTarea from './Componentes/TablaProyectoTarea'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -32,8 +34,11 @@ const estilos = makeStyles(theme => ({
 }))
 
 
-const Empleado = () => {
+const Empleado = (props) => {
     const classes = estilos();
+
+    const location = useLocation();
+
     return (
         
         <div>
@@ -43,7 +48,7 @@ const Empleado = () => {
                     color="inherit" 
                     aria-label="back" 
                     className={classes.backButton} 
-                    
+                    href='/hours'
                 >
                     <ArrowBackIcon/>
                 </IconButton>
@@ -51,7 +56,7 @@ const Empleado = () => {
             </Typography>
 
             <Typography variant='h6'className={classes.texto2}>
-                Empleado: X
+                Empleado: {location.state.detail}
             </Typography>
 
             <div className={classes.tabla}>
@@ -64,5 +69,4 @@ const Empleado = () => {
         </div>
     )
 }
-
 export default Empleado

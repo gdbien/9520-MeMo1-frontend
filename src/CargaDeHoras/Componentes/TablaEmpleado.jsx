@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
   const columns = [
     { id: 'numLegajo', label: 'Legajo N°', minWidth: 170, format: (value) => value.toLocaleString('en-US') },
@@ -67,6 +68,18 @@ const TablaEmpleado = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const history = useHistory();
+  
+  const handleRoute = (row) =>{ 
+    console.log(row);
+    var id = Object.values(row)[1] + ' ' + Object.values(row)[2];
+    console.log(id)
+    history.push({
+      pathname: '/hours/empleado',
+      state: { detail:  id}
+    })
+  }
       
   return (
   <Paper className={classes.root}>
@@ -88,7 +101,7 @@ const TablaEmpleado = () => {
                 <TableBody>
                   {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code} onClick = {() => handleRoute(row)}>
                         {columns.map((column) => {
                           const value = row[column.id];
                           return (

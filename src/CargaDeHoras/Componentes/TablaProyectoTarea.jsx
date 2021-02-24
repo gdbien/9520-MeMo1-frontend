@@ -56,7 +56,7 @@ const TablaProyectoTarea = (props) => {
       
         return (
           <Paper className={classes.root}>
-              <Typography variant='body5' className={classes.texto}>{props.titulo} </Typography>
+              <Typography variant='body2' className={classes.texto}>{props.titulo} </Typography>
             <TableContainer className={classes.container}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
