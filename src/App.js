@@ -1,12 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+// Pages
+import SupportContainer from "./pages/support";
+
 function App() {
   return (
     <Router>
       <Switch>
         <Route path="/support">
-          <h1> Soporte </h1>
+          <SupportContainer/>
         </Route>
         <Route path="/resources">
           <h1> Recrusos </h1>
