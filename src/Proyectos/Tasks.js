@@ -16,14 +16,14 @@ const columns = [
     { field: 'tickets', headerName: 'Tickets', width: 150 }
 ];
 
-export default function Tasks({codeId}) {
+export default function Tasks(codeId) {
 
     const [error, setError] = React.useState(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [project, setProject] = React.useState(null);
 
     React.useEffect(() => {
-        fetch('https://psa-projects.herokuapp.com/projects?id='+codeId.toString())
+        fetch('https://psa-projects.herokuapp.com/projects/project?id='+codeId.toString())
             .then(res => res.json())
             .then(
                 (result) => {
@@ -35,7 +35,7 @@ export default function Tasks({codeId}) {
                     setError(error);
                 }
             )
-    },)
+    },[])
 
     if (error) {
         return <div>Error: {error.message}</div>;
