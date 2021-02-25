@@ -9,7 +9,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
-import TaskList from "./Tasks";
 
 const columns = [
     { id: 'codeId', label: 'ID', minWidth: 100 },
@@ -94,9 +93,12 @@ export default function ProjectsList() {
                                         if(column.id === "taskList") {
                                             return (
                                                 <TableCell key={column.id} align={column.align}>
-                                                    <Button onClick={() => { TaskList(row['codeId']) }}
-                                                        variant="contained" color="primary"> View
-                                                    </Button>
+                                                    <Button onClick={() => {
+
+                                                    }}
+                                                    variant="contained" color="primary"
+                                                    href = {`tasks/${row['codeId']}`}>
+                                                    View </Button>
                                                 </TableCell>
                                             );
                                         }
