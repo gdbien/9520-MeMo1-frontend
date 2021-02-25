@@ -4,7 +4,7 @@ import BarraBusqueda from './Componentes/BarraBusqueda'
 import TablaEmpleado from './Componentes/TablaEmpleado'
 import Empleado from './Empleado'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import CargaDeHoras from './CargaDeHoras'
+import CargaDeHoras from './CargaDeHoras';
 
 const InicioRecursos = () => {
 

@@ -5,6 +5,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useLocation } from "react-router-dom";
 import TablaProyecto from './Componentes/TablaProyecto'
 import TablaTarea from './Componentes/TablaTarea'
+import { withRouter } from 'react-router-dom';
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -50,7 +51,7 @@ const Empleado = (props) => {
                     color="inherit" 
                     aria-label="back" 
                     className={classes.backButton} 
-                    href='/resources'
+                    onClick={props.history.goBack}
                 >
                     <ArrowBackIcon/>
                 </IconButton>
@@ -75,4 +76,4 @@ const Empleado = (props) => {
         </div>
     )
 }
-export default Empleado
+export default withRouter(Empleado)

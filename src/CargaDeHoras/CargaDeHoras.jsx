@@ -4,6 +4,7 @@ import Navbar from './Componentes/NavBar'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useLocation } from "react-router-dom";
 import TablaRegistro from './Componentes/TablaRegistro'
+import { withRouter } from 'react-router-dom';
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -37,16 +38,16 @@ const CargaDeHoras = (props) => {
     const classes = estilos();
 
     const location = useLocation();
-
+    
     return (
         <div>
             <Navbar/>
             <Typography variant='h5' className={classes.texto1}>
-            <IconButton 
+            <IconButton
                     color="inherit" 
                     aria-label="back" 
                     className={classes.backButton} 
-                    href='/resources/empleado'
+                    onClick={props.history.goBack}
                 >
                     <ArrowBackIcon/>
                 </IconButton>
@@ -67,4 +68,4 @@ const CargaDeHoras = (props) => {
         </div>
     )
 }
-export default CargaDeHoras
+export default withRouter(CargaDeHoras) 
