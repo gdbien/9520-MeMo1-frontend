@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { Typography } from '@material-ui/core'
-import { ContextoTareas } from '../Contexto/ContextoTareas';
 
 const columns = [
   {
@@ -45,10 +44,6 @@ const useStyles = makeStyles({
 
 
 const TablaTarea = (props) => {
-
-  const { dataNueva } = useContext(ContextoTareas);
-
-  var idProyecto = null;
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -62,16 +57,10 @@ const TablaTarea = (props) => {
     baseURL: `http://psa-projects.herokuapp.com/`
   })
 
-  function setIdProyecto(id) {
-    console.log(id);
-    idProyecto = id;
-  }
-
   React.useEffect(() => {
-    console.log(dataNueva)
-    setIdProyecto(dataNueva);
-    if (idProyecto) {
-      var url = "/projects/project?id=" + idProyecto;
+    console.log("Efecto")
+    if (props.projectId) {
+      var url = "/projects/project?id=" + props.projectId;
       console.log(url);
       api.get(url)
         .then(res => {
@@ -82,7 +71,7 @@ const TablaTarea = (props) => {
           setIserror(true)
         })
     }
-  })
+  }, [props.projectId])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

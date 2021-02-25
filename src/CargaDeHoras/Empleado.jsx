@@ -5,7 +5,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useLocation } from "react-router-dom";
 import TablaProyecto from './Componentes/TablaProyecto'
 import TablaTarea from './Componentes/TablaTarea'
-import { ProveedorTareas } from './Contexto/ContextoTareas';
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -41,8 +40,9 @@ const Empleado = (props) => {
 
     const location = useLocation();
 
+    const [projectId, setProjectId] = React.useState(null);
+
     return (
-        <ProveedorTareas>
         <div>
             <Navbar/>
             <Typography variant='h5' className={classes.texto1}>
@@ -50,7 +50,7 @@ const Empleado = (props) => {
                     color="inherit" 
                     aria-label="back" 
                     className={classes.backButton} 
-                    href='/hours'
+                    href='/resources'
                 >
                     <ArrowBackIcon/>
                 </IconButton>
@@ -62,18 +62,17 @@ const Empleado = (props) => {
             </Typography>
 
             <Typography variant='h6'className={classes.texto3}>
-                Numero de Legajo: {location.state.detailID}
+                Número de Legajo: {location.state.detailID}
             </Typography>
 
             <div className={classes.tabla}>
-            <TablaProyecto titulo='Proyectos'/> 
+            <TablaProyecto titulo='Proyectos' setProjectId={setProjectId}/> 
             </div>
             
             <div className={classes.tabla2}>
-            <TablaTarea titulo='Tareas'/> 
+            <TablaTarea titulo='Tareas' projectId={projectId}/> 
             </div>
         </div>
-        </ProveedorTareas>
     )
 }
 export default Empleado

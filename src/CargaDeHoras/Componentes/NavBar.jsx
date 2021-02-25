@@ -22,8 +22,8 @@ const Navbar = (props) => {
 
                 <ArrowForwardIosIcon fontSize="small"/>
 
-                <Link to="/hours">
-                     Carga de Horas
+                <Link to="/resources">
+                     Recursos
                 </Link>
 
             </Toolbar>

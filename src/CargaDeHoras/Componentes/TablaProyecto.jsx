@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { Typography } from '@material-ui/core'
-import { ContextoTareas } from '../Contexto/ContextoTareas';
 
 const columns = [
   {
@@ -45,8 +44,6 @@ const useStyles = makeStyles({
 
 
 const TablaProyecto = (props) => {
-
-  const { dataNueva, setDataNueva } = useContext(ContextoTareas);
 
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
@@ -83,7 +80,7 @@ const TablaProyecto = (props) => {
 
   const handleClick = (row) => {
     var id = Object.values(row)[0];
-    setDataNueva(id);
+    props.setProjectId(id);
   };
 
   return (

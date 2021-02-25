@@ -5,14 +5,15 @@ import TablaEmpleado from './Componentes/TablaEmpleado'
 import Empleado from './Empleado'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-const InicioCargaDeHoras = () => {
+const InicioRecursos = () => {
 
     return (
         <Router>
         <Switch>
-            <Route path="/hours/empleado" component={Empleado}>
+            <Route path="/resources/empleado">
+                <Empleado/>
             </Route>
-            <Route path="/hours" component={InicioCargaDeHoras}>
+            <Route path="/resources">
                 <div>
                 <Navbar />
                 <BarraBusqueda />
@@ -24,4 +25,4 @@ const InicioCargaDeHoras = () => {
     )
 }
 
-export default InicioCargaDeHoras
+export default InicioRecursos

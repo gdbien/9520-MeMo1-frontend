@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import InicioCargaDeHoras from "./CargaDeHoras/InicioCargaDeHoras";
+import InicioRecursos from "./CargaDeHoras/InicioRecursos";
 
 function App() {
   return (
@@ -10,9 +10,7 @@ function App() {
           <h1> Soporte </h1>
         </Route>
         <Route path="/resources">
-          <h1> Recrusos </h1>
-        </Route>
-        <Route path="/hours" component={InicioCargaDeHoras}>
+          <InicioRecursos/>
         </Route>
         <Route path="/">
           <h1> Home </h1>
