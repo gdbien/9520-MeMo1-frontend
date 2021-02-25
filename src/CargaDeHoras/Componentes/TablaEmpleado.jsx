@@ -84,8 +84,8 @@ const TablaEmpleado = () => {
     var nombre = Object.values(row)[1] + ' ' + Object.values(row)[2];
     var id = Object.values(row)[0];
     history.push({
-      pathname: '/resources/empleado',
-      state: { detail: nombre, detailID: id}
+      pathname: '/resources/' + Object.values(row)[0],
+      state: { nombre: nombre, legajo: id}
     })
   }
 

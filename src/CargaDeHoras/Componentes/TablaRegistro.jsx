@@ -14,15 +14,21 @@ import { useHistory, useLocation } from "react-router-dom";
 
 const columns = [
   {
-    id: 'taskId',
-    label: 'Código',
+    id: 'id',
+    label: 'ID',
     minWidth: 50,
     align: 'center'
   },
   {
-    id: 'name',
-    label: 'Nombre',
-    minWidth: 100,
+    id: 'cantHoras',
+    label: 'Cantidad de Horas',
+    minWidth: 50,
+    align: 'center'
+  },
+  {
+    id: 'fechaTrabajada',
+    label: 'Fecha Trabajada',
+    minwidth: 100,
     align: 'center'
   },
 ];
@@ -42,9 +48,7 @@ const useStyles = makeStyles({
   },
 });
 
-
-
-const TablaTarea = (props) => {
+const TablaRegistro = (props) => {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -55,24 +59,26 @@ const TablaTarea = (props) => {
   const [errorMessages, setErrorMessage] = React.useState([])
 
   const api = axios.create({
-    baseURL: `http://psa-projects.herokuapp.com/`
+    baseURL: `http://psa-bac-carga-de-horas.herokuapp.com/`
   })
 
+  const location = useLocation();
+
   React.useEffect(() => {
-    console.log("Efecto")
-    if (props.projectId) {
-      var url = "/projects/project?id=" + props.projectId;
-      console.log(url);
+    var lista = location.pathname.split('/');
+    var idPersona = lista[2];
+    var idProyecto = lista[3];
+    var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + location.state.codigo + "/registros";
+    console.log(url);
       api.get(url)
         .then(res => {
-          setData(res.data.tasksList)
+          setData(res.data)
         })
         .catch(error => {
-          setErrorMessage(["No se pudieron cargar las tareas"])
+          setErrorMessage(["No se pudieron obtener los registros"])
           setIserror(true)
         })
-    }
-  }, [props.projectId])
+  }, [])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -85,17 +91,8 @@ const TablaTarea = (props) => {
 
   const history = useHistory();
 
-  const location = useLocation();
+  const handleClick = (row) => {
 
-  const handleRoute = (row) => {
-    var lista = location.pathname.split('/');
-    var id = lista[2];
-    var nombre = Object.values(row)[1];
-    var codigo = Object.values(row)[0]
-    history.push({
-      pathname: '/resources/' + id + '/' + props.projectId,
-      state: { tarea: nombre, codigo: codigo }
-    })
   }
 
   return (
@@ -119,7 +116,7 @@ const TablaTarea = (props) => {
           <TableBody>
             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.taskId} onClick={() => handleRoute(row)}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.id} onClick={() => handleClick(row)}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -148,4 +145,4 @@ const TablaTarea = (props) => {
 }
 
 
-export default TablaTarea
+export default TablaRegistro

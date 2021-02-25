@@ -3,8 +3,7 @@ import { makeStyles, Typography, IconButton } from '@material-ui/core'
 import Navbar from './Componentes/NavBar'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useLocation } from "react-router-dom";
-import TablaProyecto from './Componentes/TablaProyecto'
-import TablaTarea from './Componentes/TablaTarea'
+import TablaRegistro from './Componentes/TablaRegistro'
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -34,13 +33,10 @@ const estilos = makeStyles(theme => ({
 
 }))
 
-
-const Empleado = (props) => {
+const CargaDeHoras = (props) => {
     const classes = estilos();
 
     const location = useLocation();
-    
-    const [projectId, setProjectId] = React.useState(null);
 
     return (
         <div>
@@ -50,7 +46,7 @@ const Empleado = (props) => {
                     color="inherit" 
                     aria-label="back" 
                     className={classes.backButton} 
-                    href='/resources'
+                    href='/resources/empleado'
                 >
                     <ArrowBackIcon/>
                 </IconButton>
@@ -58,21 +54,17 @@ const Empleado = (props) => {
             </Typography>
 
             <Typography variant='h6'className={classes.texto2}>
-                Empleado: {location.state.nombre}
+                Tarea: {location.state.tarea}
             </Typography>
 
             <Typography variant='h6'className={classes.texto3}>
-                Número de Legajo: {location.state.legajo}
+                Código de Tarea: {location.state.codigo}
             </Typography>
-
-            <div className={classes.tabla}>
-             <TablaProyecto titulo='Proyectos' setProjectId={setProjectId}/> 
-            </div>
             
             <div className={classes.tabla2}>
-             <TablaTarea titulo='Tareas' projectId={projectId}/> 
+            <TablaRegistro titulo='Registros'/> 
             </div>
         </div>
     )
 }
-export default Empleado
+export default CargaDeHoras
