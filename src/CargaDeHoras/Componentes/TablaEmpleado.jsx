@@ -81,10 +81,11 @@ const TablaEmpleado = () => {
   const history = useHistory();
 
   const handleRoute = (row) => {
-    var id = Object.values(row)[1] + ' ' + Object.values(row)[2];
+    var nombre = Object.values(row)[1] + ' ' + Object.values(row)[2];
+    var id = Object.values(row)[0];
     history.push({
       pathname: '/hours/empleado',
-      state: { detail: id }
+      state: { detail: nombre, detailID: id}
     })
   }
 

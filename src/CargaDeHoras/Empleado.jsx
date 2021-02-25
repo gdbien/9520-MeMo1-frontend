@@ -9,12 +9,12 @@ import { ProveedorTareas } from './Contexto/ContextoTareas';
 
 const estilos = makeStyles(theme => ({
     tabla: {
-        marginTop: 20,
+        marginTop: 0,
         marginLeft: 150,
         float: 'left',
     },
     tabla2: {
-        marginTop: 20,
+        marginTop: 0,
         marginRight: 150,
         float: 'right',
     },
@@ -26,7 +26,8 @@ const estilos = makeStyles(theme => ({
         marginLeft: 60,
     },
     texto3: {
-
+        marginTop: 0,
+        marginLeft: 60,
     },
     backButton: {
         
@@ -58,6 +59,10 @@ const Empleado = (props) => {
 
             <Typography variant='h6'className={classes.texto2}>
                 Empleado: {location.state.detail}
+            </Typography>
+
+            <Typography variant='h6'className={classes.texto3}>
+                Numero de Legajo: {location.state.detailID}
             </Typography>
 
             <div className={classes.tabla}>
