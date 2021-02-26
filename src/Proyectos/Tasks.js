@@ -16,14 +16,14 @@ const columns = [
     { field: 'tickets', headerName: 'Tickets', width: 150 }
 ];
 
-export default function Tasks(codeId) {
+export default function Tasks(props) {
 
     const [error, setError] = React.useState(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [project, setProject] = React.useState(null);
 
     React.useEffect(() => {
-        fetch('https://psa-projects.herokuapp.com/projects/project?id='+codeId.toString())
+        fetch('https://psa-projects.herokuapp.com/projects/project?id='+props.match.params.projectId)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -48,7 +48,7 @@ export default function Tasks(codeId) {
             <Typography variant="h2" color="secondary" align="center">
             Proyecto no encontrado </Typography>
         );
-    } else if(project['taskList'] === []){
+    } else if(project['tasksList'] === []){
         return(<Typography variant="h2" color="primary" align="center">
             No contiene tareas </Typography>
         );
@@ -56,7 +56,10 @@ export default function Tasks(codeId) {
 
     return (
         <div style={{ height: 400, width: '100%' }}>
-            <DataGrid rows={project['taskList']} columns={columns} pageSize={5} checkboxSelection />
+            <DataGrid rows={project['tasksList'].map((task) => { 
+                task["id"] = task.taskId;
+                return task;
+                })} columns={columns} pageSize={5} checkboxSelection />
         </div>
     );
 }

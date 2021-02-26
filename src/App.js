@@ -11,8 +11,7 @@ function App() {
       <Route path="/projects">
         <Projects />
       </Route>
-      <Route path="/tasks/:projectId" component={projectId}>
-        <Tasks codeId={projectId}/>
+      <Route path="/tasks/:projectId" component={Tasks}>
       </Route>
     </Switch>
   </Router>
