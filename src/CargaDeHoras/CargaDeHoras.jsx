@@ -49,6 +49,18 @@ const CargaDeHoras = (props) => {
     const classes = estilos();
 
     const location = useLocation();
+
+    const [fecha, setFecha] = React.useState("2017-05-24");
+
+    const [horas, setHoras] = React.useState(0);
+
+    const handleClickConfirmar = () => {
+        var idPersona = location.state.legajo;
+        var idProyecto = location.state.id;
+        var idTarea = location.state.codigo;
+        var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + idTarea;
+        console.log(fecha);
+    };
     
     return (
         <div>
@@ -78,14 +90,15 @@ const CargaDeHoras = (props) => {
             </div>
 
             <div className={classes.tabla}>
-                <TablaDeCarga/>
+                <TablaDeCarga setFecha={setFecha} setHoras={setHoras} fecha={fecha} horas={horas}/>
             </div>
             
             <div className={classes.texto4}>
-            <Typography variant='body6' >
+            <Typography variant='body2' >
                 <IconButton 
                     color="primary" 
                     aria-label="confirmar" 
+                    onClick={() => handleClickConfirmar()}
                 >
                     <CheckIcon/>
                 </IconButton>
@@ -93,7 +106,7 @@ const CargaDeHoras = (props) => {
             </Typography>
             </div>
             <div  className={classes.texto5}>
-            <Typography variant='body6'>
+            <Typography variant='body2'>
                 <IconButton 
                     color="secondary" 
                     aria-label="eliminar" 

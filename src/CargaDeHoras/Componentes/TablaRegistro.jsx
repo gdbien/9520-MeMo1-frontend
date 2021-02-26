@@ -69,7 +69,6 @@ const TablaRegistro = (props) => {
     var idPersona = lista[2];
     var idProyecto = lista[3];
     var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + location.state.codigo + "/registros";
-    console.log(url);
       api.get(url)
         .then(res => {
           setData(res.data)

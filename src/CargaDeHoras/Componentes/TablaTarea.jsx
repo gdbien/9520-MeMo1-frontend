@@ -95,7 +95,7 @@ const TablaTarea = (props) => {
     var codigo = Object.values(row)[0]
     history.push({
       pathname: '/resources/' + id + '/' + props.projectId,
-      state: { tarea: nombreTarea, codigo: codigo, nombre: nombre, legajo: legajo }
+      state: { id: props.projectId, tarea: nombreTarea, codigo: codigo, nombre: nombre, legajo: legajo }
     })
   }
 

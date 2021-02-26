@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography} from '@material-ui/core';
@@ -28,8 +28,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function TablaDeCarga() {
+export default function TablaDeCarga(props) {
   const classes = useStyles();
+
+  const [fecha, setFecha] = React.useState("2017-05-24");
+
+  const [horas, setHoras] = React.useState(0);
 
   return (
            
@@ -42,7 +46,10 @@ export default function TablaDeCarga() {
          id="date"
          label="Fecha trabajada"
          type="date"
-         defaultValue="2017-05-24"
+         value={fecha}
+         onChange={
+
+        }
          className={classes.campo1}
          InputLabelProps={{
          shrink: true,
@@ -51,7 +58,8 @@ export default function TablaDeCarga() {
         <TextField
           id="Cantidad de horas"
           label="Cantidad de horas"
-          defaultValue="0"
+          type="number"
+          value={horas}
           variant="outlined"
           className={classes.campo2}
         />
