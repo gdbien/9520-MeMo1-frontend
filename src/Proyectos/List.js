@@ -12,11 +12,11 @@ import Button from '@material-ui/core/Button';
 
 const columns = [
     { id: 'codeId', label: 'ID', minWidth: 100 },
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'state', label: 'State', minWidth: 100 },
-    { id: 'creationDate', label: 'Creation Date', minWidth: 100 },
-    { id: 'owner', label: 'Owner', minWidth: 100 },
-    { id: 'taskList', label: 'Task List', minWidth: 100 }
+    { id: 'name', label: 'Nombre', minWidth: 170 },
+    { id: 'state', label: 'Estado', minWidth: 100 },
+    { id: 'creationDate', label: 'Fecha de Creación', minWidth: 100 },
+    { id: 'owner', label: 'Líder', minWidth: 100 },
+    { id: 'taskList', label: 'Lista de Tareas', minWidth: 100 }
 ];
 
 const useStyles = makeStyles({
@@ -98,7 +98,7 @@ export default function ProjectsList() {
                                                     }}
                                                     variant="contained" color="primary"
                                                     href = {`tasks/${row['codeId']}`}>
-                                                    View </Button>
+                                                    Ver Tareas </Button>
                                                 </TableCell>
                                             );
                                         }
