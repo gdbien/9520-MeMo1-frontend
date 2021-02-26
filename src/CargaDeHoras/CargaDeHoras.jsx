@@ -5,16 +5,20 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useLocation } from "react-router-dom";
 import TablaRegistro from './Componentes/TablaRegistro'
 import { withRouter } from 'react-router-dom';
+import TablaDeCarga from './Componentes/TablaDeCarga';
+import CheckIcon from '@material-ui/icons/Check';
+import BlockIcon from '@material-ui/icons/Block';
 
 const estilos = makeStyles(theme => ({
     tabla: {
         marginTop: 0,
-        marginLeft: 150,
+        marginLeft: 100,
         float: 'left',
     },
     tabla2: {
-        marginTop: 0,
-        marginRight: 150,
+        marginTop: -25,
+        marginBottom: 250,
+        marginRight: 250,
         float: 'right',
     },
     texto1: {
@@ -27,6 +31,13 @@ const estilos = makeStyles(theme => ({
     texto3: {
         marginTop: 0,
         marginLeft: 60,
+    },
+    texto4: {
+        marginTop: 95,
+        marginLeft: 400,
+    },
+    texto5: {
+        marginLeft: 400,
     },
     backButton: {
         
@@ -61,10 +72,38 @@ const CargaDeHoras = (props) => {
             <Typography variant='h6'className={classes.texto3}>
                 Código de Tarea: {location.state.codigo}
             </Typography>
-            
+
             <div className={classes.tabla2}>
-            <TablaRegistro titulo='Registros'/> 
+                <TablaRegistro titulo='Registros'/> 
             </div>
+
+            <div className={classes.tabla}>
+                <TablaDeCarga/>
+            </div>
+            
+            <div className={classes.texto4}>
+            <Typography variant='body6' >
+                <IconButton 
+                    color="primary" 
+                    aria-label="confirmar" 
+                >
+                    <CheckIcon/>
+                </IconButton>
+                Confirmar
+            </Typography>
+            </div>
+            <div  className={classes.texto5}>
+            <Typography variant='body6'>
+                <IconButton 
+                    color="secondary" 
+                    aria-label="eliminar" 
+                >
+                <BlockIcon/>
+            </IconButton>
+                Eliminar
+            </Typography>
+            </div>
+            
         </div>
     )
 }

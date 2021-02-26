@@ -59,10 +59,8 @@ const TablaTarea = (props) => {
   })
 
   React.useEffect(() => {
-    console.log("Efecto")
     if (props.projectId) {
       var url = "/projects/project?id=" + props.projectId;
-      console.log(url);
       api.get(url)
         .then(res => {
           setData(res.data.tasksList)

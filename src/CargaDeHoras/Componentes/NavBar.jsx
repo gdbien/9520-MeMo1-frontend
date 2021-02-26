@@ -3,7 +3,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import {makeStyles} from '@material-ui/core/styles';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles({
     barra: {
@@ -18,8 +18,16 @@ const useStyles = makeStyles({
 
 const Navbar = (props) => {
 
-var classes = useStyles();
+    var classes = useStyles();
 
+    //const location = useLocation();
+
+    function empleado() {
+        if (typeof props.location.state != "undefined"){ 
+            return props.location.state.pathname;
+        }
+        return ""/"";
+    }
 
     return (
         <AppBar className={classes.barra} >
@@ -36,10 +44,10 @@ var classes = useStyles();
                 <Link to="/resources">
                      Recursos
                 </Link>
-
+               
             </Toolbar>
         </AppBar>
     )
 }
 
-export default Navbar
+export default withRouter(Navbar)
