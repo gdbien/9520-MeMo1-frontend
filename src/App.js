@@ -4,7 +4,6 @@ import Projects from "./Proyectos/Projects";
 import Tasks from "./Proyectos/Tasks";
 
 function App() {
-  let projectId;
   return(
   <Router>
     <Switch>
