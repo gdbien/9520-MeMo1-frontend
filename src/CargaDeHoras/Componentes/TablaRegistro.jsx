@@ -71,6 +71,7 @@ const TablaRegistro = (props) => {
     var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + location.state.codigo + "/registros";
 
     const timer = setInterval(() => {
+      console.log("Refreshed")
       api.get(url)
         .then(res => {
           setData(res.data)
@@ -79,7 +80,7 @@ const TablaRegistro = (props) => {
           setErrorMessage(["No se pudieron obtener los registros"])
           setIserror(true)
       })
-    }, 5000); //Ponerle 1s despues osea 1000
+    }, 15000); //Ponerle 1s despues osea 1000
     return () => clearInterval(timer);
   }, [])
 
@@ -142,7 +143,7 @@ const TablaRegistro = (props) => {
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
-        labelRowsPerPage= 'Filas por pagina'
+        labelRowsPerPage= 'Filas por página'
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}

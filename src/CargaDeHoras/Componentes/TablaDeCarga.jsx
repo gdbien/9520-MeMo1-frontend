@@ -6,6 +6,8 @@ import CheckIcon from '@material-ui/icons/Check';
 import BlockIcon from '@material-ui/icons/Block';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import axios from 'axios';
+import { Button } from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,9 +23,13 @@ const useStyles = makeStyles((theme) => ({
     textDecorationLine: 'underline',
     color: "#212121",
   },
+  idSeleccionado: {
+    marginLeft: 100,
+    marginTop: -50,
+  },
   texto6: {
-    marginLeft: 300,
-    marginTop: -85,
+    marginTop: -49,
+    marginRight: -20,
     float: 'right',
   },
   campo1: {
@@ -31,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0),
   },
   campo2: {
-    marginTop: theme.spacing(-6),
+    marginTop: theme.spacing(-7),
     marginLeft: theme.spacing(25),
     width: 70,
   },
@@ -70,10 +76,7 @@ export default function TablaDeCarga(props) {
     if (esPatch) {
       //Caso PATCH (se le pasa a la url tambien el idRegistro)
       //Solo se le pasan las horas, sin {}
-      const bodyPatch = {
-        "cantHoras": horas
-      };
-      api.patch(url + "/registros/" + idRegistro, horas);
+      api.patch(url + "/registros/" + idRegistro, horas, { headers: {'Content-Type': 'application/json'}});
     } else {
       //Caso POST (no lleva id de registro)
       const bodyPost = {
@@ -85,6 +88,9 @@ export default function TablaDeCarga(props) {
   };
 
   const handleClickEliminar = () => {
+    setEsPatch(false)
+    setFecha(fechaInicial)
+    setHoras(horasIniciales)
     api.delete(url + "/registros/" + idRegistro);
   };
 
@@ -101,6 +107,17 @@ export default function TablaDeCarga(props) {
       <Typography variant='body1' className={classes.texto}>
         Carga:
         </Typography>
+        {esPatch &&
+            (<TextField
+              className={classes.idSeleccionado} 
+              value={"ID: " + idRegistro}
+              id="outlined-basic"
+              variant="outlined"
+              style={{ width: 100 }}
+              disabled={true}
+              inputProps={{style: { textAlign: 'center', color: 'black'}}} >   
+            </TextField>)
+        }
       <div>
         <TextField
           id="date"
@@ -118,19 +135,20 @@ export default function TablaDeCarga(props) {
             shrink: true,
           }}
           disabled={esPatch}
+          variant='outlined'
         />
         <TextField
           id="Cantidad de horas"
           label="Cantidad de horas"
           type="number"
           value={horas}
-          InputProps={{ inputProps: { min: 0.25, max: 24, step: "0.25" } }}
+          InputProps={{ inputProps: { min: 0.25, max: 24, step: 0.25 } }}
           onChange={(event) => {
             setHoras(event.target.value)
           }}
-          variant="outlined"
           className={classes.campo2}
-          style={{ width: 80 }}
+          style={{ width: 80}}
+          variant='outlined'
         />
       </div>
       <div className={classes.texto4}>
@@ -145,18 +163,6 @@ export default function TablaDeCarga(props) {
             Confirmar
         </Typography>
       </div>
-      <div className={classes.texto5}>
-        <Typography variant='body2'>
-          <IconButton
-            color="secondary"
-            aria-label="eliminar"
-            onClick={() => handleClickEliminar()}
-          >
-        <BlockIcon />
-        </IconButton>
-            Eliminar
-        </Typography>
-      </div>
       <div className={classes.texto6}>
         <Typography variant='body2'>
           <IconButton
@@ -168,6 +174,20 @@ export default function TablaDeCarga(props) {
         </IconButton>
             Limpiar
         </Typography>
+      </div>
+      <div className={classes.texto5}>
+      {esPatch &&
+        (<Typography variant='body2'>
+          <IconButton
+            color="secondary"
+            aria-label="eliminar"
+            onClick={() => handleClickEliminar()}
+          >
+        <BlockIcon />
+        </IconButton>
+            Eliminar
+        </Typography>)
+      }
       </div>
     </form>
   );

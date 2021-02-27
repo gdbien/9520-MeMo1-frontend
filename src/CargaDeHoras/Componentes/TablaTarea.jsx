@@ -136,7 +136,7 @@ const TablaTarea = (props) => {
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
-        labelRowsPerPage= 'Filas por pagina'
+        labelRowsPerPage= 'Filas por página'
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}
