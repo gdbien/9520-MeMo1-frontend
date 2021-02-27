@@ -69,6 +69,8 @@ const TablaRegistro = (props) => {
     var idPersona = lista[2];
     var idProyecto = lista[3];
     var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + location.state.codigo + "/registros";
+
+    const timer = setInterval(() => {
       api.get(url)
         .then(res => {
           setData(res.data)
@@ -76,7 +78,9 @@ const TablaRegistro = (props) => {
         .catch(error => {
           setErrorMessage(["No se pudieron obtener los registros"])
           setIserror(true)
-        })
+      })
+    }, 5000); //Ponerle 1s despues osea 1000
+    return () => clearInterval(timer);
   }, [])
 
   const handleChangePage = (event, newPage) => {
@@ -91,9 +95,10 @@ const TablaRegistro = (props) => {
   const history = useHistory();
 
   const handleClick = (row) => {
-    var id = Object.values(row)[0];
+    var idRegistro = Object.values(row)[0];
     var cantHoras = Object.values(row)[1];
     var fecha = Object.values(row)[2];
+    props.setIdRegistro(idRegistro);
     props.setFecha(fecha);
     props.setHoras(cantHoras);
   }

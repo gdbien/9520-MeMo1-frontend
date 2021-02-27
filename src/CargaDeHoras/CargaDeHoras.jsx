@@ -6,9 +6,6 @@ import { useLocation } from "react-router-dom";
 import TablaRegistro from './Componentes/TablaRegistro'
 import { withRouter } from 'react-router-dom';
 import TablaDeCarga from './Componentes/TablaDeCarga';
-import CheckIcon from '@material-ui/icons/Check';
-import BlockIcon from '@material-ui/icons/Block';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -51,18 +48,12 @@ const CargaDeHoras = (props) => {
 
     const location = useLocation();
 
-    const [fecha, setFecha] = React.useState(null);
+    const [fecha, setFecha] = React.useState(new Date().toLocaleDateString('en-CA'));
 
-    const [horas, setHoras] = React.useState(0);
+    const [horas, setHoras] = React.useState(0.25);
 
-    const handleClickConfirmar = () => {
-        var idPersona = location.state.legajo;
-        var idProyecto = location.state.id;
-        var idTarea = location.state.codigo;
-        var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + idTarea;
-        console.log(fecha);
-    };
-    
+    const [idRegistro, setIdRegistro] = React.useState(null);
+
     return (
         <div>
             <Navbar/>
@@ -87,36 +78,12 @@ const CargaDeHoras = (props) => {
             </Typography>
 
             <div className={classes.tabla2}>
-                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras}/> 
+                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras} setIdRegistro={setIdRegistro}/> 
             </div>
 
             <div className={classes.tabla}>
-                <TablaDeCarga fecha={fecha} horas={horas}/>
-            </div>
-            
-            <div className={classes.texto4}>
-            <Typography variant='body2' >
-                <IconButton 
-                    color="primary" 
-                    aria-label="confirmar" 
-                    onClick={() => handleClickConfirmar()}
-                >
-                    <CheckIcon/>
-                </IconButton>
-                Confirmar
-            </Typography>
-            </div>
-            <div  className={classes.texto5}>
-            <Typography variant='body2'>
-                <IconButton 
-                    color="secondary" 
-                    aria-label="eliminar" 
-                >
-                <BlockIcon/>
-            </IconButton>
-                Eliminar
-            </Typography>
-            </div>
+                <TablaDeCarga idRegistro={idRegistro} fecha={fecha} horas={horas} idPersona={location.state.legajo} idProyecto={location.state.id} idTarea={location.state.codigo} />
+            </div>   
             
         </div>
     )

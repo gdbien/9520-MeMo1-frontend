@@ -88,13 +88,12 @@ const TablaTarea = (props) => {
   const handleRoute = (row) => {
     var lista = location.pathname.split('/');
     var nombre = location.state.nombre;
-    console.log(location.state);
     var legajo = location.state.legajo;
     var id = lista[2];
     var nombreTarea = Object.values(row)[1];
     var codigo = Object.values(row)[0]
     history.push({
-      pathname: '/resources/' + id + '/' + props.projectId,
+      pathname: '/personas/' + id + '/' + props.projectId,
       state: { id: props.projectId, tarea: nombreTarea, codigo: codigo, nombre: nombre, legajo: legajo }
     })
   }

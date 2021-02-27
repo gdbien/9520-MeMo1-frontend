@@ -11,13 +11,13 @@ const InicioRecursos = () => {
     return (
         <Router>
         <Switch>
-            <Route path="/resources/:empleado/:proyecto">
+            <Route path="/personas/:empleado/:proyecto">
                 <CargaDeHoras/>
             </Route>
-            <Route path="/resources/:empleado">
+            <Route path="/personas/:empleado">
                 <Empleado/>
             </Route>
-            <Route path="/resources">
+            <Route path="/personas">
                 <div>
                 <Navbar />
                 <BarraBusqueda />

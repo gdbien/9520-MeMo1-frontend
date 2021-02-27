@@ -9,7 +9,7 @@ function App() {
         <Route path="/support">
           <h1> Soporte </h1>
         </Route>
-        <Route path="/resources">
+        <Route path="/personas">
           <InicioRecursos/>
         </Route>
         <Route path="/">
