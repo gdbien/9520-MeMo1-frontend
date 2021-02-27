@@ -11,6 +11,7 @@ import DeleteDialog from "./DeleteDialog";
 import EditDialog from "./EditDialog";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+
 function getEditButton(onClickListener) {
     return (<IconButton aria-label="edit"
         color="secondary" onClick={onClickListener}>
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+export const URL = 'https://psa-projects.herokuapp.com'
 
 export default function TasksList(props) {
 
@@ -89,7 +91,7 @@ export default function TasksList(props) {
                         thisRow[f] = params.getValue(f);
                     });
     
-                    setCurrentTask(fields);
+                    setCurrentTask(thisRow);
                     
                     setEditDialog(true);
                 }
@@ -149,7 +151,7 @@ export default function TasksList(props) {
     );
 
     React.useEffect(() => {
-        fetch('https://psa-projects.herokuapp.com/projects/project?id='+props.projectId)
+        fetch(URL + '/projects/project?id='+props.projectId)
             .then(res => res.json())
             .then( result => {
                     setIsLoaded(true);
@@ -197,7 +199,7 @@ export default function TasksList(props) {
                 </Modal>
             </Container>}
             {openEditDialog ?
-                <EditDialog taskId={currentTask.taskId} handleExternalClose={() =>setEditDialog(false)}/> : <div> </div>
+                <EditDialog currentTask={currentTask} handleExternalClose={() =>setEditDialog(false)}/> : <div> </div>
             }
 
             {openDeleteDialog ?

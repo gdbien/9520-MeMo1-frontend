@@ -11,6 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {URL} from './TasksList'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -29,14 +30,15 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function EditDialog({ taskId , handleExternalClose}) {
+export default function EditDialog({ currentTask , handleExternalClose}) {
     const classes = useStyles();
 
     const [popOpen, setPopOpen] = React.useState(true);
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
-    const [task, setTask] = React.useState(null);
+    const [task, setTask] = React.useState(currentTask);
 
+    console.log(currentTask)
     const handleAcceptPop = () => {
         setPopOpen(false);
         setIsLoading(true);
@@ -49,11 +51,12 @@ export default function EditDialog({ taskId , handleExternalClose}) {
     };
 
     const editTask = async () => {
-        const response = await fetch('https://psa-projects.herokuapp.com/tasks',  {
+        const response = await fetch(URL + '/tasks',  {
                 method: 'patch',
-                mode: 'cors',
                 headers: {
-                    'Access-Control-Allow-Origin':'*'
+                    'Access-Control-Allow-Origin':'*',
+                    'Access-Control-Request-Headers' : 'application/json',
+                    'Access-Control-Request-Method': 'PATCH'
                   },
                 body: JSON.stringify(task)
                 })
@@ -61,37 +64,42 @@ export default function EditDialog({ taskId , handleExternalClose}) {
         console.log(task)
         setIsLoading(false);
         setPopOpen(false); 
-        window.location.reload();
+        //window.location.reload();
     }
 
     function handlenNameChange (e) {
-        setTask({
-            ["name"]: e.target.value
-        });
+        task.name = e.target.value
+        setTask(
+            task
+        );
     }
 
     function handlenDescriptionChange (e) {
-        setTask({
-            ["description"]: e.target.value
-        });
+        task.description = e.target.value
+        setTask(
+            task
+        );
     }
 
     function handlenEstimationChange (e) {
-        setTask({
-            ["estimation"]: e.target.value
-        });
+        task.estimation = e.target.value
+        setTask(
+            task
+        );
     }
 
     function handlePriorityChange (e) {
-        setTask({
-            ["priority"]: e.target.value
-        });
+        task.priority = e.target.value
+        setTask(
+            task
+        );
     }
 
     function handleStateChange (e) {
-        setTask({
-            ["state"]: e.target.value
-        });
+        task.state = e.target.value
+        setTask(
+            task
+        );
     }
 
     if (isLoading) {
@@ -147,9 +155,9 @@ export default function EditDialog({ taskId , handleExternalClose}) {
                     onChange={handleStateChange}
                 >
                     <option aria-label="None" value="" />
-                    <option value={10}>En progreso</option>
-                    <option value={20}>Bloqueada</option>
-                    <option value={30}>Finalizada</option>
+                    <option value={"En progreso"}>En progreso</option>
+                    <option value={"Bloqueada"}>Bloqueada</option>
+                    <option value={"Finalizada"}>Finalizada</option>
                 </Select>
             </FormControl>
 
@@ -166,9 +174,9 @@ export default function EditDialog({ taskId , handleExternalClose}) {
                     onChange={handlePriorityChange}
                 >
                     <option aria-label="None" value="" />
-                    <option value={10}>Baja</option>
-                    <option value={20}>Media</option>
-                    <option value={30}>Alta</option>
+                    <option value={"Baja"}>Baja</option>
+                    <option value={"Media"}>Media</option>
+                    <option value={"Alta"}>Alta</option>
                 </Select>
             </FormControl>
 

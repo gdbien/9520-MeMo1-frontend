@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {URL} from './TasksList'
 
 export default function DeleteDialog({taskId, handleExternalClose}) {
 
@@ -24,7 +25,7 @@ export default function DeleteDialog({taskId, handleExternalClose}) {
     };
 
     const deleteTask = async () => {
-        const response = await fetch('https://psa-projects.herokuapp.com/tasks?id=' + taskId,  {
+        const response = await fetch(URL + taskId,  {
                 method: 'delete',
                 headers: {
                     'Access-Control-Allow-Origin':'*'
