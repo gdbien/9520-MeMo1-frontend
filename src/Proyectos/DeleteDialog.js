@@ -23,23 +23,15 @@ export default function DeleteDialog({taskId}) {
         setPopOpen(false);
         window.location.reload();
     };
-    console.log(taskId)
 
-    const DeleteTask = () => {
-        fetch('https://localhost:8080/tasks?id=' + taskId,  {
+    const DeleteTask = async () => {
+        const response = await fetch('https://psa-projects.herokuapp.com/tasks/tasks?id=' + taskId,  {
                 method: 'delete'
                 })
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false);
-                        window.location.reload();
-                    },
-                    (error) => {
-                        setIsLoading(false);
-                        setError(error);
-                    }
-                )
+        console.log(response)
+        setIsLoading(false);
+        setMustDelete(false);
+        setPopOpen(false);
     }
 
     if(mustDelete) {

@@ -86,6 +86,7 @@ export default function TasksList(props) {
                     });
     
                     setCurrentTask(fields);
+                    
                     setEditDialog(true);
                 }
     
@@ -109,7 +110,7 @@ export default function TasksList(props) {
                         thisRow[f] = params.getValue(f);
                     });
     
-                    setCurrentTask(fields);
+                    setCurrentTask(thisRow);
                     setDeleteDialog(true);
                 };
     
@@ -144,7 +145,7 @@ export default function TasksList(props) {
     );
 
     React.useEffect(() => {
-        fetch('http://localhost:8080/projects/project?id='+props.projectId)
+        fetch('https://psa-projects.herokuapp.com/projects/project?id='+props.projectId)
             .then(res => res.json())
             .then( result => {
                     setIsLoaded(true);
@@ -153,7 +154,7 @@ export default function TasksList(props) {
                     setIsLoaded(true);
                     setError(error);
                 })
-    },[])
+    },[props.projectId])
 
     if (error) {
         return <div> Error: {error.message}</div>;
@@ -164,14 +165,6 @@ export default function TasksList(props) {
             Loading...
             </h5>
             </div>;
-    }
-
-    if(openEditDialog ) {
-        return (<EditDialog task={currentTask.taskId}/>);
-    }
-
-    if(openDeleteDialog) {
-        return (<DeleteDialog task={currentTask.taskId}/>);
     }
 
     return (
@@ -199,13 +192,27 @@ export default function TasksList(props) {
                     {body}
                 </Modal>
             </Container>
+            {openEditDialog ?
+                <EditDialog taskId={currentTask.taskId}/> : <div> </div>
+            }
+
+            {openDeleteDialog ?
+                <DeleteDialog taskId={currentTask.taskId}/> : <div> </div>
+            }
             <Container fixed>
-                <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid rows={tasks.map((task) => {
-                        task["id"] = task.taskId;
-                        return task;
-                    })} columns={columns} pageSize={5} />
-                </div>
+                { ( tasks === undefined ) ?
+                <h5 >
+                No hay tareas para este proyecto
+                </h5>
+            
+                
+                : <div style={{ height: 400, width: '100%' }}>
+                <DataGrid rows={tasks.map((task) => {
+                    task["id"] = task.taskId;
+                    return task;
+                })} columns={columns} pageSize={5} />
+            
+            </div>}
             </Container>
         </React.Fragment>
     )
