@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import TablaDeCarga from './Componentes/TablaDeCarga';
 import CheckIcon from '@material-ui/icons/Check';
 import BlockIcon from '@material-ui/icons/Block';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -50,7 +51,7 @@ const CargaDeHoras = (props) => {
 
     const location = useLocation();
 
-    const [fecha, setFecha] = React.useState("2017-05-24");
+    const [fecha, setFecha] = React.useState(null);
 
     const [horas, setHoras] = React.useState(0);
 
@@ -86,11 +87,11 @@ const CargaDeHoras = (props) => {
             </Typography>
 
             <div className={classes.tabla2}>
-                <TablaRegistro titulo='Registros'/> 
+                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras}/> 
             </div>
 
             <div className={classes.tabla}>
-                <TablaDeCarga setFecha={setFecha} setHoras={setHoras} fecha={fecha} horas={horas}/>
+                <TablaDeCarga fecha={fecha} horas={horas}/>
             </div>
             
             <div className={classes.texto4}>

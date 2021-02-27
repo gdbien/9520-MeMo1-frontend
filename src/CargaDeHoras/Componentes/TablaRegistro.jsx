@@ -91,7 +91,11 @@ const TablaRegistro = (props) => {
   const history = useHistory();
 
   const handleClick = (row) => {
-
+    var id = Object.values(row)[0];
+    var cantHoras = Object.values(row)[1];
+    var fecha = Object.values(row)[2];
+    props.setFecha(fecha);
+    props.setHoras(cantHoras);
   }
 
   return (
