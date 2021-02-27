@@ -80,7 +80,7 @@ const TablaRegistro = (props) => {
           setErrorMessage(["No se pudieron obtener los registros"])
           setIserror(true)
       })
-    }, 15000); //Ponerle 1s despues osea 1000
+    }, 5000000); //Ponerle 1s despues osea 1000
     return () => clearInterval(timer);
   }, [])
 

@@ -144,7 +144,15 @@ export default function TablaDeCarga(props) {
           value={horas}
           InputProps={{ inputProps: { min: 0.25, max: 24, step: 0.25 } }}
           onChange={(event) => {
-            setHoras(event.target.value)
+            if (event.target.value > 24) {
+              setHoras(24)
+            } else {
+              if (event.target.value <= 0 || String(event.target.value).length == 0 ) {
+                setHoras(0.25)
+              } else {
+                setHoras(event.target.value)
+              }
+            }  
           }}
           className={classes.campo2}
           style={{ width: 80}}
