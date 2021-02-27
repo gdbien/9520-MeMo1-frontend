@@ -25,7 +25,7 @@ export default function DeleteDialog({taskId, handleExternalClose}) {
     };
 
     const deleteTask = async () => {
-        const response = await fetch(URL + taskId,  {
+        const response = await fetch(URL + '/tasks?id=' + taskId,  {
                 method: 'delete',
                 headers: {
                     'Access-Control-Allow-Origin':'*'
