@@ -1,12 +1,21 @@
 import * as React from 'react';
 import {DataGrid} from '@material-ui/data-grid';
-import {Container, CssBaseline, IconButton} from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import {
+    Container,
+    CssBaseline,
+    FormControl,
+    IconButton,
+    Input,
+    InputLabel, MenuItem, Select,
+    Typography
+} from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import {makeStyles} from "@material-ui/core/styles";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {green} from "@material-ui/core/colors";
-import EditIcon from '@material-ui/icons/Edit';
+import Button from "@material-ui/core/Button";
+import SendIcon from '@material-ui/icons/Send';
+
 
 const columns = [
     { field: 'taskId', headerName: 'ID', width: 70 },
@@ -22,13 +31,9 @@ const columns = [
     { field: 'tickets', headerName: 'Tickets', width: 150 }
 ];
 
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
+    const top = 50;
+    const left = 50;
 
     return {
         top: `${top}%`,
@@ -39,18 +44,28 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        position: 'absolute',
-        width: 400,
+        position: "absolute",
+        width: 500,
+        height: 500,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
     margin: {
         margin: theme.spacing(1),
-    }
+    },
+    create: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
 }));
-
 
 export default function TasksList(props) {
 
@@ -61,6 +76,18 @@ export default function TasksList(props) {
     const [error, setError] = React.useState(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [tasks, setTasks] = React.useState([]);
+    const [name, setName] = React.useState(null);
+
+
+    var new_task = {
+        "projectId":0,
+        "name":"",
+        "description":"",
+        "estimation":0,
+        "totalHours":0
+    };
+
+    new_task.projectId = props.projectId;
 
     const handleOpen = () => {
         setOpen(true);
@@ -70,9 +97,63 @@ export default function TasksList(props) {
         setOpen(false);
     };
 
+
+
+    const createNewTask = () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(new_task)
+        };
+        fetch('https://psa-projects.herokuapp.com/tasks', requestOptions)
+            .then(r => tasks.push(r));
+        handleClose();
+    };
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title">Nueva Tarea</h2>
+            <h1 id="title" align="center"> Nueva Tarea </h1>
+            <form className={classes.create} noValidate autoComplete="off">
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="name">Nombre</InputLabel>
+                    <Input id="name" onChange={event => new_task.name = event.target.value} />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="description">Descripcion</InputLabel>
+                    <Input id="description" onChange={event => new_task.description = event.target.value} />
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel id="priority-label">Prioridad</InputLabel>
+                    <Select
+                        labelId="priority-label"
+                        id="priority"
+                        onChange={event => new_task.priority = event.target.value}
+                    >
+                        <MenuItem value="BAJA">Baja</MenuItem>
+                        <MenuItem value="MEDIA">Media</MenuItem>
+                        <MenuItem value="ALTA">Alta</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="estimation">Estimación</InputLabel>
+                    <Input id="estimation" onChange={event => new_task.estimation = event.target.value}
+                           type="number"/>
+                </FormControl>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="totalHours">Horas Totales</InputLabel>
+                    <Input id="totalHours" onChange={event => new_task.totalHours = event.target.value}
+                           type="number"/>
+                </FormControl>
+            </form>
+            <Button
+                variant="contained"
+                color="primary"
+                className={classes.margin}
+                endIcon={<SendIcon />}
+                onClick={createNewTask}
+            >
+                Aceptar
+            </Button>
         </div>
     );
 
@@ -83,6 +164,7 @@ export default function TasksList(props) {
                 (result) => {
                     setIsLoaded(true);
                     setTasks(result.tasksList);
+                    setName(result.name);
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -101,17 +183,14 @@ export default function TasksList(props) {
     return (
         <React.Fragment>
             <CssBaseline />
+            <Container maxWidth="sm">
+                <Typography variant="h4" align="center" color="secondary">
+                    {name}
+                </Typography>
+            </Container>
             <Container fixed>
-                <IconButton aria-label="new" className={classes.margin}>
-                    <AddCircleIcon fontSize="large" onClick={handleOpen}
-                                   style={{ color: green[500] }}/>
-                </IconButton>
-                <IconButton aria-label="delete" className={classes.margin}
-                            color="secondary">
-                    <DeleteIcon fontSize="large" />
-                </IconButton>
-                <IconButton aria-label="edit" className={classes.margin}>
-                    <EditIcon fontSize="large" />
+                <IconButton aria-label="new" className={classes.margin} onClick={handleOpen}>
+                    <AddCircleIcon fontSize="large" style={{ color: green[500] }}/>
                 </IconButton>
                 <Modal
                     open={open}
