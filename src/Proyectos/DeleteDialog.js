@@ -9,14 +9,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 export default function DeleteDialog({taskId}) {
 
     const [popOpen, setPopOpen] = React.useState(true);
-    const [mustDelete, setMustDelete] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
     
     const handleAcceptPop = () => {
         setPopOpen(false);
         setIsLoading(true);
-        setMustDelete(true);
+        deleteTask()
     };
     
     const handleClosePop = () => {
@@ -24,18 +23,17 @@ export default function DeleteDialog({taskId}) {
         window.location.reload();
     };
 
-    const DeleteTask = async () => {
-        const response = await fetch('https://psa-projects.herokuapp.com/tasks/tasks?id=' + taskId,  {
-                method: 'delete'
+    const deleteTask = async () => {
+        const response = await fetch('https://psa-projects.herokuapp.com/tasks?id=' + taskId,  {
+                method: 'delete',
+                headers: {
+                    'Access-Control-Allow-Origin':'*'
+                  }
                 })
         console.log(response)
         setIsLoading(false);
-        setMustDelete(false);
         setPopOpen(false);
-    }
-
-    if(mustDelete) {
-        DeleteTask()
+        window.location.reload();
     }
 
     if(isLoading){
