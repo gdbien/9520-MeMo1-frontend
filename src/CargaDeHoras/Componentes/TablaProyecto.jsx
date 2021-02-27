@@ -121,6 +121,7 @@ const TablaProyecto = (props) => {
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
+        labelRowsPerPage= 'Filas por pagina'
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}

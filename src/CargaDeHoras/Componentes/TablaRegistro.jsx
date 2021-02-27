@@ -101,6 +101,7 @@ const TablaRegistro = (props) => {
     props.setIdRegistro(idRegistro);
     props.setFecha(fecha);
     props.setHoras(cantHoras);
+    props.setEsPatch(true);
   }
 
   return (
@@ -141,6 +142,7 @@ const TablaRegistro = (props) => {
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
+        labelRowsPerPage= 'Filas por pagina'
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}

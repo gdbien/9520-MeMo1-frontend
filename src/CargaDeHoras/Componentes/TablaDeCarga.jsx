@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography, IconButton} from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import BlockIcon from '@material-ui/icons/Block';
-import DeleteIcon from '@material-ui/icons/Delete';
+import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +20,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 550,
     textDecorationLine: 'underline',
     color: "#212121",
+  },
+  texto6: {
+    marginLeft: 300,
+    marginTop: -85,
+    float: 'right',
   },
   campo1: {
     marginTop: theme.spacing(0),
@@ -52,19 +57,23 @@ export default function TablaDeCarga(props) {
 
   const [idRegistro, setIdRegistro] = React.useState(null);
 
+  const [esPatch, setEsPatch] = React.useState(false);
+
   React.useEffect(() => {
     setFecha(props.fecha);
     setHoras(props.horas);
     setIdRegistro(props.idRegistro);
-  }, [props.fecha, props.horas, props.idRegistro])
+    setEsPatch(props.esPatch);
+  }, [props.fecha, props.horas, props.idRegistro, props.esPatch])
 
   const handleClickConfirmar = () => {
-    if (false/*esPatch*/) {
+    if (esPatch) {
       //Caso PATCH (se le pasa a la url tambien el idRegistro)
+      //Solo se le pasan las horas, sin {}
       const bodyPatch = {
         "cantHoras": horas
       };
-      api.patch(url + "/registros/" + idRegistro);
+      api.patch(url + "/registros/" + idRegistro, horas);
     } else {
       //Caso POST (no lleva id de registro)
       const bodyPost = {
@@ -78,6 +87,13 @@ export default function TablaDeCarga(props) {
   const handleClickEliminar = () => {
     api.delete(url + "/registros/" + idRegistro);
   };
+
+  const handleClickLimpiar = () => {
+    if (esPatch == true) 
+      setEsPatch(false);
+      setFecha(fechaInicial);
+      setHoras(horasIniciales);
+  }
 
   return (
 
@@ -101,7 +117,7 @@ export default function TablaDeCarga(props) {
           InputLabelProps={{
             shrink: true,
           }}
-          //disabled={esPatch}
+          disabled={esPatch}
         />
         <TextField
           id="Cantidad de horas"
@@ -139,6 +155,18 @@ export default function TablaDeCarga(props) {
         <BlockIcon />
         </IconButton>
             Eliminar
+        </Typography>
+      </div>
+      <div className={classes.texto6}>
+        <Typography variant='body2'>
+          <IconButton
+            color="inherit"
+            aria-label="limpiar"
+            onClick={() => handleClickLimpiar()}
+          >
+        <SettingsBackupRestoreIcon />
+        </IconButton>
+            Limpiar
         </Typography>
       </div>
     </form>

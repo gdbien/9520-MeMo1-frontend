@@ -54,6 +54,8 @@ const CargaDeHoras = (props) => {
 
     const [idRegistro, setIdRegistro] = React.useState(null);
 
+    const [esPatch, setEsPatch] = React.useState(false);
+
     return (
         <div>
             <Navbar/>
@@ -78,11 +80,11 @@ const CargaDeHoras = (props) => {
             </Typography>
 
             <div className={classes.tabla2}>
-                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras} setIdRegistro={setIdRegistro}/> 
+                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras} setIdRegistro={setIdRegistro} setEsPatch={setEsPatch}/> 
             </div>
 
             <div className={classes.tabla}>
-                <TablaDeCarga idRegistro={idRegistro} fecha={fecha} horas={horas} idPersona={location.state.legajo} idProyecto={location.state.id} idTarea={location.state.codigo} />
+                <TablaDeCarga idRegistro={idRegistro} fecha={fecha} horas={horas} idPersona={location.state.legajo} idProyecto={location.state.id} idTarea={location.state.codigo} esPatch={esPatch} />
             </div>   
             
         </div>

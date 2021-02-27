@@ -59,7 +59,7 @@ const Empleado = (props) => {
             </Typography>
 
             <Typography variant='h6'className={classes.texto2}>
-                Empleado: {location.state.nombre}
+                Persona: {location.state.nombre}
             </Typography>
 
             <Typography variant='h6'className={classes.texto3}>

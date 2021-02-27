@@ -72,7 +72,7 @@ export default function BarraBusqueda() {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Buscar un empleado"
+              placeholder="Buscar una persona"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

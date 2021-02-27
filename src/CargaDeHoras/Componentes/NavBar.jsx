@@ -42,7 +42,7 @@ const Navbar = (props) => {
                 <ArrowForwardIosIcon className={classes.flechitas}/>
 
                 <Link to="/personas">
-                     Recursos
+                    Personas
                 </Link>
                
             </Toolbar>
