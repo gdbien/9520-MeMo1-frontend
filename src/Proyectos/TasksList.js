@@ -14,13 +14,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 function getEditButton(onClickListener) {
     return (<IconButton aria-label="edit"
         color="secondary" onClick={onClickListener}>
-        <EditIcon fontSize="medium" />
+        <EditIcon fontSize="small" />
     </IconButton>);
 }
 
 function getDeleteButton(onClickListener) {
     return (<IconButton aria-label="delete" onClick={onClickListener}>
-        <DeleteIcon fontSize="medium" />
+        <DeleteIcon fontSize="small" />
     </IconButton>);
 }
 
@@ -50,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: {
         margin: theme.spacing(1),
+    },
+    circularProgress: {
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
@@ -158,19 +162,19 @@ export default function TasksList(props) {
 
     if (error) {
         return <div> Error: {error.message}</div>;
-    } else if (!isLoaded) {
-        return <div>
-            <CircularProgress />
-            <h5 >
-            Loading...
-            </h5>
-            </div>;
     }
 
     return (
         <React.Fragment>
-            <CssBaseline />
-            <Container fixed>
+            <CssBaseline/>
+            { (!isLoaded) ?
+                <div>
+                    <CircularProgress className={useStyles.circularProgress} />
+                        <h5 >
+                        Loading...
+                    </h5>
+                </div>
+            : <Container fixed>
                 <IconButton aria-label="new" className={classes.margin}>
                     <AddCircleIcon fontSize="large" onClick={handleOpen}
                         style={{ color: green[500] }} />
@@ -191,13 +195,13 @@ export default function TasksList(props) {
                 >
                     {body}
                 </Modal>
-            </Container>
+            </Container>}
             {openEditDialog ?
-                <EditDialog taskId={currentTask.taskId}/> : <div> </div>
+                <EditDialog taskId={currentTask.taskId} handleExternalClose={() =>setEditDialog(false)}/> : <div> </div>
             }
 
             {openDeleteDialog ?
-                <DeleteDialog taskId={currentTask.taskId}/> : <div> </div>
+                <DeleteDialog taskId={currentTask.taskId} handleExternalClose={() => setDeleteDialog(false)}/> : <div> </div>
             }
             <Container fixed>
                 { ( tasks === undefined ) ?

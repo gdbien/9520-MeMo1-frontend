@@ -29,37 +29,39 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function EditDialog({ taskId }) {
+export default function EditDialog({ taskId , handleExternalClose}) {
     const classes = useStyles();
 
     const [popOpen, setPopOpen] = React.useState(true);
-    const [mustEdit, setMustEdit] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
     const [task, setTask] = React.useState(null);
 
     const handleAcceptPop = () => {
         setPopOpen(false);
-        setMustEdit(true);
         setIsLoading(true);
+        editTask()
     };
 
     const handleClosePop = () => {
         setPopOpen(false);
+        handleExternalClose()
     };
 
-    const DeleteTask = async () => {
-        const response = await fetch('https://psa-projects.herokuapp.com/tasks?id=' + taskId,  {
-                method: 'patch'
+    const editTask = async () => {
+        const response = await fetch('https://psa-projects.herokuapp.com/tasks',  {
+                method: 'patch',
+                mode: 'cors',
+                headers: {
+                    'Access-Control-Allow-Origin':'*'
+                  },
+                body: JSON.stringify(task)
                 })
+        console.log(response)
         console.log(task)
         setIsLoading(false);
-        setMustEdit(false);
-        setPopOpen(false);  
-    }
-
-    if (mustEdit) {
-        DeleteTask()
+        setPopOpen(false); 
+        window.location.reload();
     }
 
     function handlenNameChange (e) {
