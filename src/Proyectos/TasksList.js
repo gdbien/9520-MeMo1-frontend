@@ -14,8 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { green } from "@material-ui/core/colors";
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteDialog from "./DeleteDialog";
-import EditDialog from "./EditDialog";
+import DeleteTaskDialog from "./DeleteTaskDialog";
+import EditTaskDialog from "./EditTaskDialog";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -307,11 +307,11 @@ export default function TasksList(props) {
                 {body}
             </Container>
             {openEditDialog ?
-                <EditDialog currentTask={currentTask} handleExternalClose={() => setEditDialog(false)} /> : <div> </div>
+                <EditTaskDialog currentTask={currentTask} handleExternalClose={() => setEditDialog(false)} /> : <div> </div>
             }
 
             {openDeleteDialog ?
-                <DeleteDialog taskId={currentTask.taskId} handleExternalClose={() => setDeleteDialog(false)} /> : <div> </div>
+                <DeleteTaskDialog taskId={currentTask.taskId} handleExternalClose={() => setDeleteDialog(false)} /> : <div> </div>
             }
             <Container fixed>
                 {(tasks === undefined) ?

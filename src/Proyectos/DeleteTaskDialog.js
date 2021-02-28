@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {URL} from './Projects'
 
-export default function DeleteDialog({taskId, handleExternalClose}) {
+export default function DeleteTaskDialog({taskId, handleExternalClose}) {
 
     const [popOpen, setPopOpen] = React.useState(true);
     const [isLoading, setIsLoading] = React.useState(false);

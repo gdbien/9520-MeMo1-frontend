@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(3),
       marginLeft: theme.spacing(3),
       marginBottom: theme.spacing(3),
-      minWidth: 120,
+      minWidth: 500,
     },
     textField: {
         marginRight: theme.spacing(2),
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export default function EditDialog({ currentTask , handleExternalClose}) {
+export default function EditTaskDialog({ currentTask , handleExternalClose}) {
     const classes = useStyles();
 
     const [popOpen, setPopOpen] = React.useState(true);
@@ -38,7 +38,6 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
     const [error, setError] = React.useState(null);
     const [task, setTask] = React.useState(currentTask);
 
-    console.log(currentTask)
     const handleAcceptPop = () => {
         setPopOpen(false);
         setIsLoading(true);
@@ -69,6 +68,7 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
     }
 
     function handlenNameChange (e) {
+        console.log(e.target.value)
         task.name = e.target.value
         setTask(
             task
@@ -120,14 +120,12 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
                 id="name"
                 label="Nombre"
                 type="text"
-                value={currentTask.name}
                 onChange={handlenNameChange}
             />
 
             <TextField
                 className={classes.textField}
                 autoFocus
-                value={currentTask.description}
                 margin="dense"
                 id="description"
                 label="Descripcion"
@@ -138,7 +136,6 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
             <TextField
                 className={classes.textField}
                 autoFocus
-                value={currentTask.estimation}
                 margin="dense"
                 id="estimation"
                 label="Estimacion (hs)"
@@ -150,7 +147,6 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
                 <InputLabel htmlFor="age-native-simple">Estado</InputLabel>
                 <Select
                     native
-                    value={currentTask.state}
                     inputProps={{
                         name: 'state',
                         id: 'age-native-simple',
@@ -169,7 +165,6 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
                 <InputLabel htmlFor="age-native-simple">Prioridad</InputLabel>
                 <Select
                     native
-                    value={currentTask.priority}
                     inputProps={{
                         name: 'state',
                         id: 'age-native-simple',

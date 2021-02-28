@@ -1,5 +1,5 @@
 import React from "react";
-import ProjectsList from "./List";
+import ProjectsList from "./ProjectsList";
 import Typography from '@material-ui/core/Typography';
 import {Container, CssBaseline} from "@material-ui/core";
 
