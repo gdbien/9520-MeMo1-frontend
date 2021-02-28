@@ -1,0 +1,11 @@
+@import "component/TicketTable/index.scss";
+@import "./component/TicketFilter/index.scss";
+@import "./component/InputCreateTicket/styles.scss";
+
+.support-list-title {
+  margin-left: 5%;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
