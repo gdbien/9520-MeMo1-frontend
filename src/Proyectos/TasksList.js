@@ -74,10 +74,13 @@ export default function TasksList(props) {
         "description": "",
         "estimation": 0,
         "totalHours": 0,
-        "resourceName":"",
+        "resourceLoad": {
+            "name":"",
+            "id":0
+        }
     };
 
-    new_task.projectId = props.projectId;
+    new_task.projectId = parseInt(props.projectId);;
 
     const handleOpen = () => {
         setOpen(true);
@@ -93,14 +96,15 @@ export default function TasksList(props) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(new_task)
         };
-        fetch('https://psa-projects.herokuapp.com/tasks', requestOptions)
+        fetch('http://localhost:5000/tasks', requestOptions)
 
         handleClose();
-        /*window.location.reload(false);*/
     };
 
     const handleChangeSelect = (event) => {
-        new_task.resourceName=event.target.value;
+        new_task.resourceLoad.id = parseInt(event.target.value);
+        const pj = persons.find(p => p.numLegajo === new_task.resourceLoad.id);
+        new_task.resourceLoad.name = pj.nombre + ' ' + pj.apellido;
     };
 
     const handleChangeName = (event) => {
@@ -112,11 +116,11 @@ export default function TasksList(props) {
     };
 
     const handleChangeHours = (event) => {
-        new_task.totalHours = event.target.value;
+        new_task.totalHours = parseInt(event.target.value);
     };
 
     const handleChangeEst = (event) => {
-        new_task.estimation = event.target.value;
+        new_task.estimation = parseInt(event.target.value);
     };
 
     const body = (
@@ -139,7 +143,7 @@ export default function TasksList(props) {
                                    type="number" onChange={handleChangeHours}/>
                         </FormControl>
                         <FormControl className={classes.formControl}>
-                            <InputLabel id="text-estimation"> Horas Totales </InputLabel>
+                            <InputLabel id="text-estimation"> Estimacion </InputLabel>
                             <Input id="text-estimation" aria-describedby="estimation"
                                    type="number" onChange={handleChangeEst}/>
                         </FormControl>
@@ -152,12 +156,7 @@ export default function TasksList(props) {
                                 input={<Input id="select-encargado"/>}
                             >
                                 {persons.map((person) => (
-                                    <option value={
-                                        {
-                                            "legajo": person.numLegajo,
-                                            "name": person.nombre + ' ' + person.apellido
-                                        }
-                                    }>
+                                    <option value={person.numLegajo}>
                                         {person.nombre + ' ' + person.apellido}
                                     </option>
                                 ))}
@@ -178,7 +177,7 @@ export default function TasksList(props) {
     );
 
     React.useEffect(() => {
-        fetch('https://psa-projects.herokuapp.com/projects/project?id=' + props.projectId)
+        fetch('http://localhost:5000/projects/project?id=' + props.projectId)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -216,6 +215,7 @@ export default function TasksList(props) {
                 <div style={{ height: 400, width: '100%' }}>
                     <DataGrid rows={tasks.map((task) => {
                         task["id"] = task.taskId;
+                        console.log(task);
                         return task;
                     })} columns={columns} pageSize={5} />
                 </div>

@@ -39,7 +39,7 @@ export default function ProjectsList() {
     const [rows, setRows] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('https://psa-projects.herokuapp.com/projects')
+        fetch('http://localhost:5000/projects')
             .then(res => res.json())
             .then(
                 (result) => {
