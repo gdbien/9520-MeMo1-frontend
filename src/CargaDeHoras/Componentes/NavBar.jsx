@@ -8,12 +8,15 @@ import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
     barra: {
-        backgroundColor: "#88eaf1"
+        backgroundColor: "primary"
     },
     flechitas: {
         color: "#000000",
         fontSize: "small"
     },
+    texto: {
+        color:"white"
+    }
   });
 
 
@@ -28,7 +31,7 @@ const Navbar = (props) => {
                 <ArrowForwardIosIcon className={classes.flechitas}/>
 
                 <Link to="/">
-                    <Typography variant="body2">
+                    <Typography variant="body2" className={classes.texto}>
                         Inicio
                     </Typography>
                 </Link>
@@ -36,7 +39,7 @@ const Navbar = (props) => {
                 <ArrowForwardIosIcon className={classes.flechitas}/>
 
                 <Link to="/personas">
-                    <Typography variant="body2">
+                    <Typography variant="body2" className={classes.texto}>
                         Personas
                     </Typography>
                 </Link>
