@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from 'react';
+import React, {useContext, useEffect, useReducer} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -8,7 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from "@material-ui/core/styles";
 import { TicketContext } from "../../reducer";
-import TicketService from "../../service/index";
+import TicketService from "../../service/ticket";
 
 const useStyle = makeStyles({
     filterInput: {
@@ -21,8 +21,9 @@ const useStyle = makeStyles({
     }
 });
 
+
 const TicketFilter = () => {
-    const { state, dispatch } = useContext(TicketContext);;
+    const { state, dispatch } = useContext(TicketContext);
     const classes = useStyle();
 
     const handleChange = (event, section) => {
@@ -30,8 +31,8 @@ const TicketFilter = () => {
             dispatch({type: 'CHANGE_PRIORITY_FILTER', value: event.target.value});
         } else if (section === 'STATUS') {
             dispatch({type: 'CHANGE_STATUS_FILTER', value: event.target.value});
-        } else if (section === 'PROJECT') {
-            dispatch({type: 'CHANGE_PRJECT_FILTER', value: event.target.value});
+        } else if (section === 'CLIENT') {
+            dispatch({type: 'CHANGE_CLIENT_FILTER', value: event.target.value});
         }
     };
 
@@ -40,9 +41,9 @@ const TicketFilter = () => {
         const data = {
 
         };
-        TicketService.searchTicket(data)
+
+        TicketService.searchFullTicket(data)
             .then(result => {
-                console.log(result);
                 dispatch({ type: 'LIST_TICKETS', tickets: result.results });
                 dispatch({ type: 'FINISH_LOADING' });
             });
@@ -51,14 +52,14 @@ const TicketFilter = () => {
     return (
       <Card className="support-card-filter">
           <FormControl className={classes.filterInput}>
-              <InputLabel id="priority-simple-select-label">Prioridad</InputLabel>
+              <InputLabel id="priority-simple-select-label">Severidad</InputLabel>
               <Select
                   id="priority-simple-select"
-                  value={state.filter.priority}
+                  value={state.filter.severity}
                   onChange={(e) => {handleChange(e, "PRIORITY")}}
               >
-                  {state.priority.map((priorities) => (
-                      <MenuItem value={priorities}>{priorities}</MenuItem>
+                  {state.severity.map((severity) => (
+                      <MenuItem value={severity}>{severity}</MenuItem>
                   ))}
               </Select>
           </FormControl>
@@ -69,20 +70,21 @@ const TicketFilter = () => {
                   value={state.filter.status}
                   onChange={(e) => {handleChange(e, "STATUS")}}
               >
-                  {state.status.map((statuses) => (
-                      <MenuItem value={statuses}>{statuses}</MenuItem>
+
+                  {Object.keys(state.status).map((key) => (
+                      <MenuItem value={key}>{state.status[key]}</MenuItem>
                   ))}
               </Select>
           </FormControl>
           <FormControl className={classes.filterInput}>
-              <InputLabel id="project-simple-select-label">Proyecto</InputLabel>
+              <InputLabel id="project-simple-select-label">Cliente</InputLabel>
               <Select
                   id="project-simple-select"
-                  value={state.filter.project}
-                  onChange={(e) => {handleChange(e, "PROJECT")}}
+                  value={state.filter.client}
+                  onChange={(e) => {handleChange(e, "CLIENT")}}
               >
-                  {state.project.map((priorities) => (
-                      <MenuItem value={priorities}>{priorities}</MenuItem>
+                  {state.client.map((client) => (
+                      <MenuItem value={client}>{client}</MenuItem>
                   ))}
               </Select>
           </FormControl>

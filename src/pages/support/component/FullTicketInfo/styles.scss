@@ -1,0 +1,15 @@
+.input-column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.input-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.date-picker-create {
+  width: 80%
+}
