@@ -120,12 +120,14 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
                 id="name"
                 label="Nombre"
                 type="text"
+                value={currentTask.name}
                 onChange={handlenNameChange}
             />
 
             <TextField
                 className={classes.textField}
                 autoFocus
+                value={currentTask.description}
                 margin="dense"
                 id="description"
                 label="Descripcion"
@@ -136,6 +138,7 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
             <TextField
                 className={classes.textField}
                 autoFocus
+                value={currentTask.estimation}
                 margin="dense"
                 id="estimation"
                 label="Estimacion (hs)"
@@ -147,7 +150,7 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
                 <InputLabel htmlFor="age-native-simple">Estado</InputLabel>
                 <Select
                     native
-                    
+                    value={currentTask.state}
                     inputProps={{
                         name: 'state',
                         id: 'age-native-simple',
@@ -166,7 +169,7 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
                 <InputLabel htmlFor="age-native-simple">Prioridad</InputLabel>
                 <Select
                     native
-                    
+                    value={currentTask.priority}
                     inputProps={{
                         name: 'state',
                         id: 'age-native-simple',
