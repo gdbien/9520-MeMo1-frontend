@@ -33,7 +33,7 @@ const FullTicketInfo = () => {
                 <TextField
                     required
                     id="obligatory-full-ticket-title"
-                    label="Obligatorio"
+                    label="Título"
                     defaultValue={state.actualTicket.title}
                     className={classes.input}
                     onChange={(e) => {handleOnChange(e, "title")}}
@@ -44,10 +44,16 @@ const FullTicketInfo = () => {
                     label="Descripción"
                     defaultValue={state.actualTicket.description}
                     multiline
-                    rows={10}
+                    rows={5}
                     variant="outlined"
                     onChange={(e) => {handleOnChange(e, "description")}}
                 />
+                <div>
+                    <h3>Tareas asociadas ({state.tasks.length})</h3>
+                    {state.tasks.map((task) => (
+                        <div className="row-task">#{task.taskId} {task.name}</div>
+                    ))}
+                </div>
             </div>
             <div className="input-column">
                 <FormControl required className={classes.input}>
