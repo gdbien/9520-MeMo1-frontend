@@ -92,7 +92,6 @@ export default function TasksList(props) {
                     });
     
                     setCurrentTask(thisRow);
-                    
                     setEditDialog(true);
                 }
     

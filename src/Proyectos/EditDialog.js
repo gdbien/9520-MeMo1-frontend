@@ -52,11 +52,12 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
 
     const editTask = async () => {
         const response = await fetch(URL + '/tasks',  {
-                method: 'patch',
+                method: 'put',
                 headers: {
                     'Access-Control-Allow-Origin':'*',
                     'Access-Control-Request-Headers' : 'application/json',
-                    'Access-Control-Request-Method': 'PATCH'
+                    'Access-Control-Request-Method': 'put',
+                    'Content-Type': 'application/json'
                   },
                 body: JSON.stringify(task)
                 })
@@ -64,7 +65,7 @@ export default function EditDialog({ currentTask , handleExternalClose}) {
         console.log(task)
         setIsLoading(false);
         setPopOpen(false); 
-        //window.location.reload();
+        window.location.reload();
     }
 
     function handlenNameChange (e) {
