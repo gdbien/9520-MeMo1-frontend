@@ -11,7 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {URL} from './TasksList'
+import {URL} from './Projects'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {

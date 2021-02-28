@@ -3,6 +3,8 @@ import ProjectsList from "./List";
 import Typography from '@material-ui/core/Typography';
 import {Container, CssBaseline} from "@material-ui/core";
 
+export const URL = 'https://psa-projects.herokuapp.com'
+
 function Projects() {
     return (
         <React.Fragment>

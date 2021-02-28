@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import {URL} from './Projects'
 
 const columns = [
     { id: 'codeId', label: 'ID', minWidth: 100 },
@@ -39,7 +40,7 @@ export default function ProjectsList() {
     const [rows, setRows] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('https://psa-projects.herokuapp.com/projects')
+        fetch(URL + '/projects')
             .then(res => res.json())
             .then(
                 (result) => {

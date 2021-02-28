@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {URL} from './TasksList'
+import {URL} from './Projects'
 
 export default function DeleteDialog({taskId, handleExternalClose}) {
 

@@ -1,8 +1,15 @@
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import { Container, CssBaseline, IconButton } from "@material-ui/core";
+import {
+    Container,
+    CssBaseline,
+    FormControl,
+    IconButton,
+    Input,
+    InputLabel, Select,
+    Typography
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Modal from "@material-ui/core/Modal";
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { green } from "@material-ui/core/colors";
@@ -10,7 +17,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteDialog from "./DeleteDialog";
 import EditDialog from "./EditDialog";
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Button from "@material-ui/core/Button";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
+import {URL} from './Projects'
 
 function getEditButton(onClickListener) {
     return (<IconButton aria-label="edit"
@@ -25,29 +37,19 @@ function getDeleteButton(onClickListener) {
     </IconButton>);
 }
 
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
-
-function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
-
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
-
 const useStyles = makeStyles((theme) => ({
     paper: {
-        position: 'absolute',
-        width: 400,
+        position: "absolute",
+        width: 500,
+        height: 500,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
     },
     margin: {
         margin: theme.spacing(1),
@@ -55,10 +57,15 @@ const useStyles = makeStyles((theme) => ({
     circularProgress: {
         display: "flex",
         justifyContent: "center"
-    }
+    },
+    create: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
 }));
 
-export const URL = 'https://psa-projects.herokuapp.com'
 
 export default function TasksList(props) {
 
@@ -74,6 +81,7 @@ export default function TasksList(props) {
         { field: 'projectId', headerName: 'Project ID', width: 120 },
         { field: 'resources', headerName: 'Recursos', width: 150 },
         { field: 'tickets', headerName: 'Tickets', width: 150 },
+        { field: 'person', headerName: 'Encargado', width: 150 },
         {
             field: "edit",
             headerName: "Editar",
@@ -86,15 +94,15 @@ export default function TasksList(props) {
                         .map((c) => c.field)
                         .filter((c) => c !== "__check__" && !!c);
                     const thisRow = {};
-    
+
                     fields.forEach((f) => {
                         thisRow[f] = params.getValue(f);
                     });
-    
+
                     setCurrentTask(thisRow);
                     setEditDialog(true);
                 }
-    
+
                 return getEditButton(onEdit);
             }
         },
@@ -110,31 +118,48 @@ export default function TasksList(props) {
                         .map((c) => c.field)
                         .filter((c) => c !== "__check__" && !!c);
                     const thisRow = {};
-    
+
                     fields.forEach((f) => {
                         thisRow[f] = params.getValue(f);
                     });
-    
+
                     setCurrentTask(thisRow);
                     setDeleteDialog(true);
                 };
-    
+
                 return getDeleteButton(onDelete);
             }
         }
     ]
 
     const classes = useStyles();
-    const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(false);
     const [openDeleteDialog, setDeleteDialog] = React.useState(false);
     const [openEditDialog, setEditDialog] = React.useState(false);
 
-    const [error, setError] = React.useState(null);
-    const [isLoaded, setIsLoaded] = React.useState(false);
     const [tasks, setTasks] = React.useState([]);
     const [currentTask, setCurrentTask] = React.useState(null);
-    
+
+    const [name, setName] = React.useState(null);
+
+    const [persons, setPersons] = React.useState([]);
+    const [isLoaded, setIsLoaded] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    var new_task = {
+        "projectId": 0,
+        "name": "",
+        "description": "",
+        "estimation": 0,
+        "totalHours": 0,
+        "resourceLoad": {
+            "name": "",
+            "id": 0
+        }
+    };
+
+    new_task.projectId = parseInt(props.projectId);;
+
     const handleOpen = () => {
         setOpen(true);
     };
@@ -143,23 +168,114 @@ export default function TasksList(props) {
         setOpen(false);
     };
 
+    const createNewTask = () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(new_task)
+        };
+        fetch(URL + '/tasks', requestOptions)
+
+        handleClose();
+        window.location.reload();
+    };
+
+    const handleChangeSelect = (event) => {
+        new_task.resourceLoad.id = parseInt(event.target.value);
+        const pj = persons.find(p => p.numLegajo === new_task.resourceLoad.id);
+        new_task.resourceLoad.name = pj.nombre + ' ' + pj.apellido;
+    };
+
+    const handleChangeName = (event) => {
+        new_task.name = event.target.value;
+    };
+
+    const handleChangeDesc = (event) => {
+        new_task.description = event.target.value;
+    };
+
+    const handleChangeHours = (event) => {
+        new_task.totalHours = parseInt(event.target.value);
+    };
+
+    const handleChangeEst = (event) => {
+        new_task.estimation = parseInt(event.target.value);
+    };
+
     const body = (
-        <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title">Nueva Tarea</h2>
+        <div>
+            <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
+                <DialogTitle>Nueva Tarea</DialogTitle>
+                <DialogContent>
+                    <form className={classes.container}>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="text-name"> Nombre </InputLabel>
+                            <Input id="text-name" aria-describedby="name" onChange={handleChangeName} />
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="text-desc"> Descripcion </InputLabel>
+                            <Input id="text-desc" aria-describedby="desc" onChange={handleChangeDesc} />
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="text-total-hours"> Horas Totales </InputLabel>
+                            <Input id="text-total-hours" aria-describedby="total-hours"
+                                type="number" onChange={handleChangeHours} />
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="text-estimation"> Estimacion </InputLabel>
+                            <Input id="text-estimation" aria-describedby="estimation"
+                                type="number" onChange={handleChangeEst} />
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="select-encargado"> Encargado </InputLabel>
+                            <Select
+                                native
+                                value={new_task.resourceName}
+                                onChange={handleChangeSelect}
+                                input={<Input id="select-encargado" />}
+                            >
+                                {persons.map((person) => (
+                                    <option value={person.numLegajo}>
+                                        {person.nombre + ' ' + person.apellido}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={createNewTask} color="primary">
+                        Ok
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 
     React.useEffect(() => {
-        fetch(URL + '/projects/project?id='+props.projectId)
+        fetch('https://psa-bac-carga-de-horas.herokuapp.com/personas')
             .then(res => res.json())
-            .then( result => {
-                    setIsLoaded(true);
-                    setTasks(result.tasksList);
-                }).catch(error => {
-                    setIsLoaded(true);
-                    setError(error);
-                })
-    },[props.projectId])
+            .then(
+                (result) => {
+                    setPersons(result);
+                }
+            )
+    }, [])
+
+    React.useEffect(() => {
+        fetch(URL + '/projects/project?id=' + props.projectId)
+            .then(res => res.json())
+            .then(result => {
+                setIsLoaded(true);
+                setTasks(result.tasksList);
+            }).catch(error => {
+                setIsLoaded(true);
+                setError(error);
+            })
+    }, [props.projectId])
 
     if (error) {
         return <div> Error: {error.message}</div>;
@@ -167,58 +283,51 @@ export default function TasksList(props) {
 
     return (
         <React.Fragment>
-            <CssBaseline/>
+            <CssBaseline />
+            
             { (!isLoaded) ?
                 <div>
                     <CircularProgress className={useStyles.circularProgress} />
-                        <h5 >
-                        Loading...
+                    <h5 >
+                        Cargando datos...
                     </h5>
-                </div>
-            : <Container fixed>
-                <IconButton aria-label="new" className={classes.margin}>
-                    <AddCircleIcon fontSize="large" onClick={handleOpen}
-                        style={{ color: green[500] }} />
+                </div>  : <div></div>
+            }
+            
+            <Container maxWidth="sm">
+                <Typography variant="h4" align="center" color="secondary">
+                    {name}
+                </Typography>
+            </Container>
+
+            <Container fixed>
+                <IconButton aria-label="new" className={classes.margin} onClick={handleOpen}>
+                    <AddCircleIcon fontSize="large" style={{ color: green[500] }} />
                 </IconButton>
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                >
-                    {body}
-                </Modal>
-                <Modal
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                >
-                    {body}
-                </Modal>
-            </Container>}
+                {body}
+            </Container>
             {openEditDialog ?
-                <EditDialog currentTask={currentTask} handleExternalClose={() =>setEditDialog(false)}/> : <div> </div>
+                <EditDialog currentTask={currentTask} handleExternalClose={() => setEditDialog(false)} /> : <div> </div>
             }
 
             {openDeleteDialog ?
-                <DeleteDialog taskId={currentTask.taskId} handleExternalClose={() => setDeleteDialog(false)}/> : <div> </div>
+                <DeleteDialog taskId={currentTask.taskId} handleExternalClose={() => setDeleteDialog(false)} /> : <div> </div>
             }
             <Container fixed>
-                { ( tasks === undefined ) ?
-                <h5 >
-                No hay tareas para este proyecto
+                {(tasks === undefined) ?
+                    <h5 >
+                        No hay tareas para este proyecto
                 </h5>
-            
-                
-                : <div style={{ height: 400, width: '100%' }}>
-                <DataGrid rows={tasks.map((task) => {
-                    task["id"] = task.taskId;
-                    return task;
-                })} columns={columns} pageSize={5} />
-            
-            </div>}
-            </Container>
-        </React.Fragment>
-    )
+
+
+                    : <div style={{ height: 400, width: '100%' }}>
+                        <DataGrid rows={tasks.map((task) => {
+                            task["id"] = task.taskId;
+                            return task;
+                        })} columns={columns} pageSize={5} />
+
+                    </div>}
+                    </Container>
+                </React.Fragment>
+    );
 }
