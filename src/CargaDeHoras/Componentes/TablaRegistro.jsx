@@ -90,7 +90,7 @@ const TablaRegistro = (props) => {
           setErrorMessage(["No se pudieron obtener los registros"])
           setIserror(true)
       })
-    }, 50000000000); //Ponerle 1s despues osea 1000
+    }, 500000000000); //Ponerle 1s despues osea 1000
     return () => clearInterval(timer);
   }, [])
 
@@ -117,7 +117,7 @@ const TablaRegistro = (props) => {
 
   return (
     <Paper className={classes.root}>
-      <Typography variant='body2' className={classes.texto}>{props.titulo} </Typography>
+      <Typography component={'span'} variant='body2' className={classes.texto}>{props.titulo} </Typography>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

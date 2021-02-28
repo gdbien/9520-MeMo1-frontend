@@ -205,7 +205,7 @@ export default function TablaDeCarga(props) {
         />
       </div>
       <div className={classes.texto4}>
-        <Typography variant='body2' >
+        <Typography component={'span'} variant='body2' >
           <IconButton
             color="primary"
             aria-label="confirmar"
@@ -227,7 +227,7 @@ export default function TablaDeCarga(props) {
         </Typography>
       </div>
       <div className={classes.texto6}>
-        <Typography variant='body2'>
+        <Typography component={'span'} variant='body2'>
           <IconButton
             color="inherit"
             aria-label="limpiar"
@@ -240,7 +240,7 @@ export default function TablaDeCarga(props) {
       </div>
       <div className={classes.texto5}>
         {esPatch &&
-        <Typography variant='body2'>
+        <Typography component={'span'} variant='body2'>
           <IconButton
             color="secondary"
             aria-label="eliminar"
