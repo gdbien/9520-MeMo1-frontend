@@ -44,7 +44,7 @@ const FullTicketInfo = () => {
                     label="Descripción"
                     defaultValue={state.actualTicket.description}
                     multiline
-                    rows={17}
+                    rows={10}
                     variant="outlined"
                     onChange={(e) => {handleOnChange(e, "description")}}
                 />

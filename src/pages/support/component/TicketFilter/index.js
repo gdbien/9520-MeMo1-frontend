@@ -38,10 +38,14 @@ const TicketFilter = () => {
 
     const handleSearch = () => {
         dispatch({ type: 'LOADING' });
-        const data = {
-
-        };
-
+        const data = {"filters": {}};
+        Object.keys(state.filter).forEach((key) => {
+            if (key === "severity" && state.filter[key] !== "") {
+                data.filters["severity_in"] = [state.filter[key]]
+            } else if (key === "status" && state.filter[key] !== "") {
+                data.filters["status_in"] = [state.filter[key]]
+            }
+        });
         TicketService.searchFullTicket(data)
             .then(result => {
                 dispatch({ type: 'LIST_TICKETS', tickets: result.results });
@@ -70,7 +74,7 @@ const TicketFilter = () => {
                   value={state.filter.status}
                   onChange={(e) => {handleChange(e, "STATUS")}}
               >
-
+                  <MenuItem value={""}>{""}</MenuItem>
                   {Object.keys(state.status).map((key) => (
                       <MenuItem value={key}>{state.status[key]}</MenuItem>
                   ))}
