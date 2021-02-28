@@ -63,7 +63,7 @@ const Empleado = (props) => {
             </Typography>
 
             <Typography variant='h6'className={classes.texto3}>
-                Número de Legajo: {location.state.legajo}
+                Número de legajo: {location.state.legajo}
             </Typography>
 
             <div className={classes.tabla}>

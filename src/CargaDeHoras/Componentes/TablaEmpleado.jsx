@@ -126,6 +126,7 @@ const TablaEmpleado = () => {
         value={searched}
         onChange={(searchVal) => requestSearch(searchVal)}
         onCancelSearch={() => cancelSearch()}
+        placeholder='Buscar una persona'
       />
 
       <TableContainer className={classes.container}>

@@ -21,13 +21,13 @@ const columns = [
   },
   {
     id: 'cantHoras',
-    label: 'Cantidad de Horas',
+    label: 'Cantidad de horas',
     minWidth: 50,
     align: 'center'
   },
   {
     id: 'fechaTrabajada',
-    label: 'Fecha Trabajada',
+    label: 'Fecha trabajada',
     minwidth: 100,
     align: 'center'
   },
@@ -80,19 +80,15 @@ const TablaRegistro = (props) => {
     var idProyecto = lista[3];
     var url = "/cargas/personas/" + idPersona + "/proyectos/" + idProyecto + "/tareas/" + location.state.codigo + "/registros";
 
-    const timer = setInterval(() => {
-      console.log("Refreshed")
-      api.get(url)
-        .then(res => {
-          setData(res.data)
-        })
-        .catch(error => {
-          setErrorMessage(["No se pudieron obtener los registros"])
-          setIserror(true)
+    api.get(url)
+      .then(res => {
+        setData(res.data)
       })
-    }, 500000000); //Ponerle 1s despues osea 1000
-    return () => clearInterval(timer);
-  }, [])
+      .catch((error) => {
+        setData([])
+      })
+
+  }, [props.updateRegistros])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -112,7 +108,7 @@ const TablaRegistro = (props) => {
     props.setIdRegistro(idRegistro);
     props.setFecha(fecha);
     props.setHoras(cantHoras);
-    props.setEsPatch(true);
+    props.setUpdate(!props.update);
   }
 
   return (
@@ -153,7 +149,7 @@ const TablaRegistro = (props) => {
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
-        labelRowsPerPage= 'Filas por página'
+        labelRowsPerPage='Filas por página'
         component="div"
         count={data.length}
         rowsPerPage={rowsPerPage}

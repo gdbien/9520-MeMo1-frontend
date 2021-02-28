@@ -54,7 +54,9 @@ const CargaDeHoras = (props) => {
 
     const [idRegistro, setIdRegistro] = React.useState(null);
 
-    const [esPatch, setEsPatch] = React.useState(false);
+    const [update, setUpdate] = React.useState(false);
+
+    const [updateRegistros, setUpdateRegistros] = React.useState(false);
 
     return (
         <div>
@@ -76,15 +78,15 @@ const CargaDeHoras = (props) => {
             </Typography>
 
             <Typography variant='h6'className={classes.texto3}>
-                Código de Tarea: {location.state.codigo}
+                Código de tarea: {location.state.codigo}
             </Typography>
 
             <div className={classes.tabla2}>
-                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras} setIdRegistro={setIdRegistro} setEsPatch={setEsPatch}/> 
+                <TablaRegistro titulo='Registros' setFecha={setFecha} setHoras={setHoras} setIdRegistro={setIdRegistro} setUpdate={setUpdate} update={update} updateRegistros={updateRegistros}/> 
             </div>
 
             <div className={classes.tabla}>
-                <TablaDeCarga idRegistro={idRegistro} fecha={fecha} horas={horas} idPersona={location.state.legajo} idProyecto={location.state.id} idTarea={location.state.codigo} esPatch={esPatch} />
+                <TablaDeCarga idRegistro={idRegistro} fecha={fecha} horas={horas} idPersona={location.state.legajo} idProyecto={location.state.id} idTarea={location.state.codigo} update={update} setUpdateRegistros={setUpdateRegistros} updateRegistros={updateRegistros}/>
             </div>   
             
         </div>

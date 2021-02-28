@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, IconButton} from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import BlockIcon from '@material-ui/icons/Block';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
@@ -27,12 +27,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -10,
     marginBottom: 60,
     fontWeight: 550,
+    fontSize: 18,
     textDecorationLine: 'underline',
     color: "#212121",
   },
   idSeleccionado: {
     marginLeft: 100,
-    marginTop: -50,
+    marginTop: -90,
   },
   texto6: {
     marginTop: -49,
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     float: 'right',
   },
   campo1: {
-    marginTop: theme.spacing(0),
+    marginTop: theme.spacing(-4),
     marginLeft: theme.spacing(0),
   },
   campo2: {
@@ -83,27 +84,32 @@ export default function TablaDeCarga(props) {
   const [openConfirmar2, setOpenConfirmar2] = React.useState(false);
 
   React.useEffect(() => {
-    setFecha(props.fecha);
-    setHoras(props.horas);
-    setIdRegistro(props.idRegistro);
-    setEsPatch(props.esPatch);
-  }, [props.fecha, props.horas, props.idRegistro, props.esPatch])
+    if (props.idRegistro != null) {
+      setFecha(props.fecha);
+      setHoras(props.horas);
+      setIdRegistro(props.idRegistro);
+      setEsPatch(true);
+    }
+  }, [props.fecha, props.horas, props.idRegistro, props.update])
 
   const handleClickConfirmar = () => {
     if (esPatch) {
-      //Caso PATCH (se le pasa a la url tambien el idRegistro)
-      //Solo se le pasan las horas, sin {}
       setOpenConfirmar2(true);
-      api.patch(url + "/registros/" + idRegistro, horas, { headers: {'Content-Type': 'application/json'}});
+      api.patch(url + "/registros/" + idRegistro, horas,
+        { headers: { 'Content-Type': 'application/json' } })
+        .then(function () {
+          props.setUpdateRegistros(!props.updateRegistros)
+        })
     } else {
-      //Caso POST (no lleva id de registro)
       setOpenConfirmar(true);
       const bodyPost = {
         "cantidadHoras": horas,
         "fechaTrabajada": fecha
-      }; 
-      api.post(url,bodyPost);
-    } 
+      };
+      api.post(url, bodyPost).then(function () {
+        props.setUpdateRegistros(!props.updateRegistros)
+      })
+    }
   };
 
   const handleClickEliminar = () => {
@@ -111,15 +117,15 @@ export default function TablaDeCarga(props) {
     setFecha(fechaInicial)
     setHoras(horasIniciales)
     setOpenEliminar(false);
-    api.delete(url + "/registros/" + idRegistro);
+    api.delete(url + "/registros/" + idRegistro).then(function () {
+      props.setUpdateRegistros(!props.updateRegistros)
+    })
   };
 
   const handleClickLimpiar = () => {
-    console.log(esPatch);
-    if (esPatch === true) 
-      setEsPatch(false);
-      setFecha(fechaInicial);
-      setHoras(horasIniciales);
+    setEsPatch(false);
+    setFecha(fechaInicial);
+    setHoras(horasIniciales);
   }
 
   const handleClickAbrirEliminar = () => {
@@ -134,7 +140,6 @@ export default function TablaDeCarga(props) {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenConfirmar(false);
   };
 
@@ -142,27 +147,25 @@ export default function TablaDeCarga(props) {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenConfirmar2(false);
   };
 
   return (
-
     <form className={classes.root} noValidate autoComplete="off">
       <Typography variant='body1' className={classes.texto}>
         Carga:
         </Typography>
-        {esPatch &&
-            (<TextField
-              className={classes.idSeleccionado} 
-              value={"ID: " + idRegistro}
-              id="outlined-basic"
-              variant="outlined"
-              style={{ width: 100 }}
-              disabled={true}
-              inputProps={{style: { textAlign: 'center', color: 'black'}}} >   
-            </TextField>)
-        }
+      {esPatch &&
+        (<TextField
+          className={classes.idSeleccionado}
+          value={"ID: " + idRegistro}
+          id="outlined-basic"
+          variant="outlined"
+          style={{ width: 100 }}
+          disabled={true}
+          inputProps={{ style: { textAlign: 'center', color: 'black' } }} >
+        </TextField>)
+      }
       <div>
         <TextField
           id="date"
@@ -192,15 +195,15 @@ export default function TablaDeCarga(props) {
             if (event.target.value > 24) {
               setHoras(24)
             } else {
-              if (event.target.value <= 0 || String(event.target.value).length === 0 ) {
+              if (event.target.value <= 0 || String(event.target.value).length === 0) {
                 setHoras(0.25)
               } else {
                 setHoras(event.target.value)
               }
-            }  
+            }
           }}
           className={classes.campo2}
-          style={{ width: 80}}
+          style={{ width: 80 }}
           variant='outlined'
         />
       </div>
@@ -211,17 +214,17 @@ export default function TablaDeCarga(props) {
             aria-label="confirmar"
             onClick={() => handleClickConfirmar()}
           >
-          <CheckIcon />
+            <CheckIcon />
           </IconButton>
             Confirmar
           <Snackbar open={openConfirmar} autoHideDuration={6000} onClose={handleCerrarConfirmar}>
             <Alert onClose={handleCerrarConfirmar} severity="success">
-             El registro se cargo con éxito
+              El registro se cargó con éxito.
             </Alert>
           </Snackbar>
           <Snackbar open={openConfirmar2} autoHideDuration={6000} onClose={handleCerrarConfirmar2}>
             <Alert onClose={handleCerrarConfirmar2} severity="success">
-             El registro se actualizo con éxito
+              El registro se actualizó con éxito.
             </Alert>
           </Snackbar>
         </Typography>
@@ -233,45 +236,45 @@ export default function TablaDeCarga(props) {
             aria-label="limpiar"
             onClick={() => handleClickLimpiar()}
           >
-        <SettingsBackupRestoreIcon />
-        </IconButton>
+            <SettingsBackupRestoreIcon />
+          </IconButton>
             Limpiar
         </Typography>
       </div>
       <div className={classes.texto5}>
         {esPatch &&
-        <Typography component={'span'} variant='body2'>
-          <IconButton
-            color="secondary"
-            aria-label="eliminar"
-            onClick={() => handleClickAbrirEliminar()}
-        >
-        <BlockIcon />
-        </IconButton>
+          <Typography component={'span'} variant='body2'>
+            <IconButton
+              color="secondary"
+              aria-label="eliminar"
+              onClick={() => handleClickAbrirEliminar()}
+            >
+              <BlockIcon />
+            </IconButton>
             Eliminar
             <Dialog
-        open={openEliminar}
-        onClose={handleCerrarEliminar}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        >
-        <DialogTitle id="alert-dialog-title">{"Confirme"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            ¿Está seguro de que quiere borrar este registro? 
+              open={openEliminar}
+              onClose={handleCerrarEliminar}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{"Confirme"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  ¿Está seguro de que quiere borrar este registro?
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClickEliminar} color="primary">
-            Si
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClickEliminar} color="primary">
+                  Sí
           </Button>
-          <Button onClick={handleCerrarEliminar} color="primary" autoFocus>
-            No
+                <Button onClick={handleCerrarEliminar} color="primary" autoFocus>
+                  No
           </Button>
-        </DialogActions>
-      </Dialog>
-        </Typography> 
-  
+              </DialogActions>
+            </Dialog>
+          </Typography>
+
         }
       </div>
     </form>
