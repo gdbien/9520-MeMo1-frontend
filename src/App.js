@@ -17,13 +17,13 @@ function App() {
         <Route path="/personas">
           <InicioRecursos/>
         </Route>
-        <Route path="/">
-          <h1> Home </h1>
-        </Route>
         <Route path="/projects">
           <Projects />
         </Route>
         <Route path="/tasks/:projectId" component={Tasks}>
+        </Route>
+        <Route path="/">
+          <h1> Home </h1>
         </Route>
       </Switch>
     </Router>
