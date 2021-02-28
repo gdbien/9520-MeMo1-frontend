@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Projects from "./Proyectos/Projects";
+import Tasks from "./Proyectos/Tasks";
 import InicioRecursos from "./CargaDeHoras/InicioRecursos";
 
 // Pages
@@ -14,6 +16,11 @@ function App() {
         </Route>
         <Route path="/personas">
           <InicioRecursos/>
+        </Route>
+        <Route path="/projects">
+          <Projects />
+        </Route>
+        <Route path="/tasks/:projectId" component={Tasks}>
         </Route>
         <Route path="/">
           <h1> Home </h1>
