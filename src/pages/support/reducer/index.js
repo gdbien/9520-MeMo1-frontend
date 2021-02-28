@@ -27,6 +27,7 @@ export const initialState = {
     showTicket: false,
     actualTicket: null,
     originalTicket: null,
+    showCreateTask: false,
     tasks: [
         {
             "taskId": 54,
@@ -182,6 +183,12 @@ export const reducer = (state, action) => {
                 buttonCreateTicket: false,
                 createTicket: false,
                 ticketToCreate: {"description": "", "status": "OPEN"},
+            }
+        }
+        case 'SHOW_CREATE_TASK': {
+            return {
+                ...state,
+                showCreateTask: true,
             }
         }
         default:

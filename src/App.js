@@ -11,14 +11,23 @@ function App() {
         <Route path="/support">
           <SupportContainer/>
         </Route>
-        <Route path="/resources">
-          <h1> Recrusos </h1>
+        <Route path="/personas">
+          <h1> Recursos </h1>
         </Route>
         <Route path="/hours">
           <h1> Carga de horas </h1>
         </Route>
         <Route path="/">
           <h1> Home </h1>
+          <p>
+            <a href={"/personas"}>Modulo de recursos</a>
+          </p>
+          <p>
+            <a href={"/proyecto"}>Modulo de proyectos</a>
+          </p>
+          <p>
+            <a href={"/support"}>Modulo de soporte</a>
+          </p>
         </Route>
       </Switch>
     </Router>

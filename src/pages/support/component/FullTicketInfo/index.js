@@ -7,6 +7,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import DateFnsUtils from '@date-io/date-fns'
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -17,6 +19,13 @@ const useStyles = makeStyles((theme) => ({
         width: "80%",
         marginTop: "2rem",
     },
+    chip: {
+        width: "80%",
+        justifyContent: "left"
+    },
+    addButton: {
+        marginLeft: "10px"
+    }
 }));
 
 const FullTicketInfo = () => {
@@ -25,6 +34,10 @@ const FullTicketInfo = () => {
 
     const handleOnChange = (event, key) => {
         dispatch({ type: "CHANGE_TICKET", key: key, value: event.target.value});
+    };
+
+    const handleAddTaskClick = () => {
+        dispatch({ type: 'SHOW_CREATE_TASK' })
     };
 
     return (
@@ -49,9 +62,21 @@ const FullTicketInfo = () => {
                     onChange={(e) => {handleOnChange(e, "description")}}
                 />
                 <div>
-                    <h3>Tareas asociadas ({state.tasks.length})</h3>
+                    <h3>
+                        Tareas asociadas ({state.tasks.length})
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleAddTaskClick}
+                            className={classes.addButton}
+                        >
+                            Agregar tarea
+                        </Button>
+                    </h3>
                     {state.tasks.map((task) => (
-                        <div className="row-task">#{task.taskId} {task.name}</div>
+                        <p>
+                            <Chip className={classes.chip} label={`#${task.taskId} ${task.name}`}/>
+                        </p>
                     ))}
                 </div>
             </div>
