@@ -74,12 +74,12 @@ const TablaEmpleado = () => {
     api.get("/personas")
       .then(res => {
         setData(res.data)
+        setRows(res.data)
       })
       .catch(error => {
         setErrorMessage(["No se pudieron cargar los empleados"])
         setIserror(true)
       })
-      setRows(data);
   }, [])
 
   const handleChangePage = (event, newPage) => {
@@ -107,9 +107,9 @@ const TablaEmpleado = () => {
   const [searched, setSearched] = useState("");
 
   const requestSearch = (searchedVal) => {
-    setRows(data);
     const filteredRows = data.filter((row) => {
-      return row.nombre.toLowerCase().includes(searchedVal.toLowerCase());
+      return row.nombre.toLowerCase().includes(searchedVal.toLowerCase()) ||
+             row.apellido.toLowerCase().includes(searchedVal.toLowerCase()) ;
     });
     setRows(filteredRows);
   };
@@ -165,7 +165,7 @@ const TablaEmpleado = () => {
         rowsPerPageOptions={[10, 25, 100]}
         labelRowsPerPage= 'Filas por página'
         component="div"
-        count={data.length}
+        count={rows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
