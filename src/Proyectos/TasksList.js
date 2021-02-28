@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DataGrid} from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 import {
     Container,
     CssBaseline,
@@ -9,28 +9,33 @@ import {
     InputLabel, Select,
     Typography
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { makeStyles } from "@material-ui/core/styles";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import {green} from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteDialog from "./DeleteDialog";
+import EditDialog from "./EditDialog";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from "@material-ui/core/Button";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
+import {URL} from './Projects'
 
+function getEditButton(onClickListener) {
+    return (<IconButton aria-label="edit"
+        color="secondary" onClick={onClickListener}>
+        <EditIcon fontSize="small" />
+    </IconButton>);
+}
 
-const columns = [
-    { field: 'taskId', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Nombre', width: 180 },
-    { field: 'description', headerName: 'Descripcion', width: 250 },
-    { field: 'priority', headerName: 'Prioridad', width: 170 },
-    { field: 'state', headerName: 'Estado', width: 130 },
-    { field: 'estimation', headerName: 'Estimacion', width: 170 },
-    { field: 'totalHours', headerName: 'Horas Totales', width: 170 },
-    { field: 'creationDate', headerName: 'Fecha de Creacion', width: 190 },
-    { field: 'projectId', headerName: 'Project ID', width: 120 },
-    { field: 'person', headerName: 'Encargado', width: 150 },
-];
+function getDeleteButton(onClickListener) {
+    return (<IconButton aria-label="delete" onClick={onClickListener}>
+        <DeleteIcon fontSize="small" />
+    </IconButton>);
+}
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -49,6 +54,10 @@ const useStyles = makeStyles((theme) => ({
     margin: {
         margin: theme.spacing(1),
     },
+    circularProgress: {
+        display: "flex",
+        justifyContent: "center"
+    },
     create: {
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
@@ -60,13 +69,82 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TasksList(props) {
 
+    const columns = [
+        { field: 'taskId', headerName: 'ID', width: 70 },
+        { field: 'name', headerName: 'Nombre', width: 180 },
+        { field: 'description', headerName: 'Descripcion', width: 250 },
+        { field: 'priority', headerName: 'Prioridad', width: 170 },
+        { field: 'state', headerName: 'Estado', width: 130 },
+        { field: 'estimation', headerName: 'Estimacion', width: 170 },
+        { field: 'totalHours', headerName: 'Horas Totales', width: 170 },
+        { field: 'creationDate', headerName: 'Fecha de Creacion', width: 190 },
+        { field: 'projectId', headerName: 'Project ID', width: 120 },
+        { field: 'resources', headerName: 'Recursos', width: 150 },
+        { field: 'tickets', headerName: 'Tickets', width: 150 },
+        { field: 'person', headerName: 'Encargado', width: 150 },
+        {
+            field: "edit",
+            headerName: "Editar",
+            disableClickEventBubbling: true,
+            renderCell: function (params) {
+                function onEdit() {
+                    const api = params.api;
+                    const fields = api
+                        .getAllColumns()
+                        .map((c) => c.field)
+                        .filter((c) => c !== "__check__" && !!c);
+                    const thisRow = {};
+
+                    fields.forEach((f) => {
+                        thisRow[f] = params.getValue(f);
+                    });
+
+                    setCurrentTask(thisRow);
+                    setEditDialog(true);
+                }
+
+                return getEditButton(onEdit);
+            }
+        },
+        {
+            field: "delete",
+            headerName: "Borrar",
+            disableClickEventBubbling: true,
+            renderCell: function (params) {
+                const onDelete = () => {
+                    const api = params.api;
+                    const fields = api
+                        .getAllColumns()
+                        .map((c) => c.field)
+                        .filter((c) => c !== "__check__" && !!c);
+                    const thisRow = {};
+
+                    fields.forEach((f) => {
+                        thisRow[f] = params.getValue(f);
+                    });
+
+                    setCurrentTask(thisRow);
+                    setDeleteDialog(true);
+                };
+
+                return getDeleteButton(onDelete);
+            }
+        }
+    ]
+
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [openDeleteDialog, setDeleteDialog] = React.useState(false);
+    const [openEditDialog, setEditDialog] = React.useState(false);
 
     const [tasks, setTasks] = React.useState([]);
+    const [currentTask, setCurrentTask] = React.useState(null);
+
     const [name, setName] = React.useState(null);
 
     const [persons, setPersons] = React.useState([]);
+    const [isLoaded, setIsLoaded] = React.useState(false);
+    const [error, setError] = React.useState(null);
 
     var new_task = {
         "projectId": 0,
@@ -75,8 +153,8 @@ export default function TasksList(props) {
         "estimation": 0,
         "totalHours": 0,
         "resourceLoad": {
-            "name":"",
-            "id":0
+            "name": "",
+            "id": 0
         }
     };
 
@@ -93,12 +171,13 @@ export default function TasksList(props) {
     const createNewTask = () => {
         const requestOptions = {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(new_task)
         };
-        fetch('http://localhost:5000/tasks', requestOptions)
+        fetch(URL + '/tasks', requestOptions)
 
         handleClose();
+        window.location.reload();
     };
 
     const handleChangeSelect = (event) => {
@@ -108,7 +187,7 @@ export default function TasksList(props) {
     };
 
     const handleChangeName = (event) => {
-        new_task.name=event.target.value;
+        new_task.name = event.target.value;
     };
 
     const handleChangeDesc = (event) => {
@@ -131,21 +210,21 @@ export default function TasksList(props) {
                     <form className={classes.container}>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="text-name"> Nombre </InputLabel>
-                            <Input id="text-name" aria-describedby="name" onChange={handleChangeName}/>
+                            <Input id="text-name" aria-describedby="name" onChange={handleChangeName} />
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="text-desc"> Descripcion </InputLabel>
-                            <Input id="text-desc" aria-describedby="desc" onChange={handleChangeDesc}/>
+                            <Input id="text-desc" aria-describedby="desc" onChange={handleChangeDesc} />
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="text-total-hours"> Horas Totales </InputLabel>
                             <Input id="text-total-hours" aria-describedby="total-hours"
-                                   type="number" onChange={handleChangeHours}/>
+                                type="number" onChange={handleChangeHours} />
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="text-estimation"> Estimacion </InputLabel>
                             <Input id="text-estimation" aria-describedby="estimation"
-                                   type="number" onChange={handleChangeEst}/>
+                                type="number" onChange={handleChangeEst} />
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="select-encargado"> Encargado </InputLabel>
@@ -153,7 +232,7 @@ export default function TasksList(props) {
                                 native
                                 value={new_task.resourceName}
                                 onChange={handleChangeSelect}
-                                input={<Input id="select-encargado"/>}
+                                input={<Input id="select-encargado" />}
                             >
                                 {persons.map((person) => (
                                     <option value={person.numLegajo}>
@@ -177,17 +256,6 @@ export default function TasksList(props) {
     );
 
     React.useEffect(() => {
-        fetch('http://localhost:5000/projects/project?id=' + props.projectId)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setTasks(result.tasksList);
-                    setName(result.name);
-                }
-            )
-    },[props.projectId])
-
-    React.useEffect(() => {
         fetch('https://psa-bac-carga-de-horas.herokuapp.com/personas')
             .then(res => res.json())
             .then(
@@ -195,31 +263,71 @@ export default function TasksList(props) {
                     setPersons(result);
                 }
             )
-    },[])
+    }, [])
+
+    React.useEffect(() => {
+        fetch(URL + '/projects/project?id=' + props.projectId)
+            .then(res => res.json())
+            .then(result => {
+                setIsLoaded(true);
+                setTasks(result.tasksList);
+            }).catch(error => {
+                setIsLoaded(true);
+                setError(error);
+            })
+    }, [props.projectId])
+
+    if (error) {
+        return <div> Error: {error.message}</div>;
+    }
 
     return (
         <React.Fragment>
             <CssBaseline />
+            
+            { (!isLoaded) ?
+                <div>
+                    <CircularProgress className={useStyles.circularProgress} />
+                    <h5 >
+                        Cargando datos...
+                    </h5>
+                </div>  : <div></div>
+            }
+            
             <Container maxWidth="sm">
                 <Typography variant="h4" align="center" color="secondary">
                     {name}
                 </Typography>
             </Container>
+
             <Container fixed>
                 <IconButton aria-label="new" className={classes.margin} onClick={handleOpen}>
-                    <AddCircleIcon fontSize="large" style={{ color: green[500] }}/>
+                    <AddCircleIcon fontSize="large" style={{ color: green[500] }} />
                 </IconButton>
                 {body}
             </Container>
+            {openEditDialog ?
+                <EditDialog currentTask={currentTask} handleExternalClose={() => setEditDialog(false)} /> : <div> </div>
+            }
+
+            {openDeleteDialog ?
+                <DeleteDialog taskId={currentTask.taskId} handleExternalClose={() => setDeleteDialog(false)} /> : <div> </div>
+            }
             <Container fixed>
-                <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid rows={tasks.map((task) => {
-                        task["id"] = task.taskId;
-                        console.log(task);
-                        return task;
-                    })} columns={columns} pageSize={5} />
-                </div>
-            </Container>
-        </React.Fragment>
+                {(tasks === undefined) ?
+                    <h5 >
+                        No hay tareas para este proyecto
+                </h5>
+
+
+                    : <div style={{ height: 400, width: '100%' }}>
+                        <DataGrid rows={tasks.map((task) => {
+                            task["id"] = task.taskId;
+                            return task;
+                        })} columns={columns} pageSize={5} />
+
+                    </div>}
+                    </Container>
+                </React.Fragment>
     );
 }
