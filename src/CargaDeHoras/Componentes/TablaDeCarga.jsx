@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, IconButton} from '@material-ui/core';
@@ -6,7 +6,14 @@ import CheckIcon from '@material-ui/icons/Check';
 import BlockIcon from '@material-ui/icons/Block';
 import SettingsBackupRestoreIcon from '@material-ui/icons/SettingsBackupRestore';
 import axios from 'axios';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +54,10 @@ const api = axios.create({
   baseURL: `https://psa-bac-carga-de-horas.herokuapp.com`
 })
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function TablaDeCarga(props) {
 
   var url = "/cargas/personas/" + props.idPersona + "/proyectos/" + props.idProyecto + "/tareas/" + props.idTarea;
@@ -65,6 +76,12 @@ export default function TablaDeCarga(props) {
 
   const [esPatch, setEsPatch] = React.useState(false);
 
+  const [openEliminar, setOpenEliminar] = React.useState(false);
+
+  const [openConfirmar, setOpenConfirmar] = React.useState(false);
+
+  const [openConfirmar2, setOpenConfirmar2] = React.useState(false);
+
   React.useEffect(() => {
     setFecha(props.fecha);
     setHoras(props.horas);
@@ -76,9 +93,11 @@ export default function TablaDeCarga(props) {
     if (esPatch) {
       //Caso PATCH (se le pasa a la url tambien el idRegistro)
       //Solo se le pasan las horas, sin {}
+      setOpenConfirmar2(true);
       api.patch(url + "/registros/" + idRegistro, horas, { headers: {'Content-Type': 'application/json'}});
     } else {
       //Caso POST (no lleva id de registro)
+      setOpenConfirmar(true);
       const bodyPost = {
         "cantidadHoras": horas,
         "fechaTrabajada": fecha
@@ -91,15 +110,41 @@ export default function TablaDeCarga(props) {
     setEsPatch(false)
     setFecha(fechaInicial)
     setHoras(horasIniciales)
+    setOpenEliminar(false);
     api.delete(url + "/registros/" + idRegistro);
   };
 
   const handleClickLimpiar = () => {
-    if (esPatch == true) 
+    console.log(esPatch);
+    if (esPatch === true) 
       setEsPatch(false);
       setFecha(fechaInicial);
       setHoras(horasIniciales);
   }
+
+  const handleClickAbrirEliminar = () => {
+    setOpenEliminar(true);
+  };
+
+  const handleCerrarEliminar = () => {
+    setOpenEliminar(false);
+  };
+
+  const handleCerrarConfirmar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenConfirmar(false);
+  };
+
+  const handleCerrarConfirmar2 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenConfirmar2(false);
+  };
 
   return (
 
@@ -147,7 +192,7 @@ export default function TablaDeCarga(props) {
             if (event.target.value > 24) {
               setHoras(24)
             } else {
-              if (event.target.value <= 0 || String(event.target.value).length == 0 ) {
+              if (event.target.value <= 0 || String(event.target.value).length === 0 ) {
                 setHoras(0.25)
               } else {
                 setHoras(event.target.value)
@@ -169,6 +214,16 @@ export default function TablaDeCarga(props) {
           <CheckIcon />
           </IconButton>
             Confirmar
+          <Snackbar open={openConfirmar} autoHideDuration={6000} onClose={handleCerrarConfirmar}>
+            <Alert onClose={handleCerrarConfirmar} severity="success">
+             El registro se cargo con éxito
+            </Alert>
+          </Snackbar>
+          <Snackbar open={openConfirmar2} autoHideDuration={6000} onClose={handleCerrarConfirmar2}>
+            <Alert onClose={handleCerrarConfirmar2} severity="success">
+             El registro se actualizo con éxito
+            </Alert>
+          </Snackbar>
         </Typography>
       </div>
       <div className={classes.texto6}>
@@ -184,18 +239,40 @@ export default function TablaDeCarga(props) {
         </Typography>
       </div>
       <div className={classes.texto5}>
-      {esPatch &&
-        (<Typography variant='body2'>
+        {esPatch &&
+        <Typography variant='body2'>
           <IconButton
             color="secondary"
             aria-label="eliminar"
-            onClick={() => handleClickEliminar()}
-          >
+            onClick={() => handleClickAbrirEliminar()}
+        >
         <BlockIcon />
         </IconButton>
             Eliminar
-        </Typography>)
-      }
+            <Dialog
+        open={openEliminar}
+        onClose={handleCerrarEliminar}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">{"Confirme"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            ¿Está seguro de que quiere borrar este registro? 
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClickEliminar} color="primary">
+            Si
+          </Button>
+          <Button onClick={handleCerrarEliminar} color="primary" autoFocus>
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+        </Typography> 
+  
+        }
       </div>
     </form>
   );

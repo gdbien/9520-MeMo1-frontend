@@ -4,6 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import {makeStyles} from '@material-ui/core/styles';
 import { Link, withRouter } from 'react-router-dom'
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
     barra: {
@@ -20,15 +21,6 @@ const Navbar = (props) => {
 
     var classes = useStyles();
 
-    //const location = useLocation();
-
-    function empleado() {
-        if (typeof props.location.state != "undefined"){ 
-            return props.location.state.pathname;
-        }
-        return ""/"";
-    }
-
     return (
         <AppBar className={classes.barra} >
             <Toolbar>
@@ -36,13 +28,17 @@ const Navbar = (props) => {
                 <ArrowForwardIosIcon className={classes.flechitas}/>
 
                 <Link to="/">
-                     Inicio
+                    <Typography variant="body2">
+                        Inicio
+                    </Typography>
                 </Link>
 
                 <ArrowForwardIosIcon className={classes.flechitas}/>
 
                 <Link to="/personas">
-                    Personas
+                    <Typography variant="body2">
+                        Personas
+                    </Typography>
                 </Link>
                
             </Toolbar>

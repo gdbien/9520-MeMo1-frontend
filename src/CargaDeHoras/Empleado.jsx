@@ -19,7 +19,7 @@ const estilos = makeStyles(theme => ({
         float: 'right',
     },
     texto1: {
-        marginTop: 60,
+        marginTop: 75,
     },
     texto2: {
         marginTop: 40,
