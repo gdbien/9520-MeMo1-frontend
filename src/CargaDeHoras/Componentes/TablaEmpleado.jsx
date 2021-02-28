@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,6 +10,8 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+
+import SearchBar from "material-ui-search-bar";
 
 const columns = [
   {
@@ -77,6 +79,7 @@ const TablaEmpleado = () => {
         setErrorMessage(["No se pudieron cargar los empleados"])
         setIserror(true)
       })
+      setRows(data);
   }, [])
 
   const handleChangePage = (event, newPage) => {
@@ -99,8 +102,32 @@ const TablaEmpleado = () => {
     })
   }
 
+  //Barra de busqueda
+  const [rows, setRows] = useState(data);
+  const [searched, setSearched] = useState("");
+
+  const requestSearch = (searchedVal) => {
+    setRows(data);
+    const filteredRows = data.filter((row) => {
+      return row.nombre.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+    setRows(filteredRows);
+  };
+
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+  };
+
   return (
     <Paper className={classes.root}>
+
+      <SearchBar
+        value={searched}
+        onChange={(searchVal) => requestSearch(searchVal)}
+        onCancelSearch={() => cancelSearch()}
+      />
+
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -117,7 +144,7 @@ const TablaEmpleado = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.numLegajo} onClick={() => handleRoute(row)}>
                   {columns.map((column) => {

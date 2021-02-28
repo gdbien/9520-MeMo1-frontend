@@ -1,12 +1,19 @@
 import React from 'react'
 import Navbar from './Componentes/NavBar'
-import BarraBusqueda from './Componentes/BarraBusqueda'
 import TablaEmpleado from './Componentes/TablaEmpleado'
 import Empleado from './Empleado'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CargaDeHoras from './CargaDeHoras';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    root: {
+      marginTop: 150,
+    },
+  });
 
 const InicioRecursos = () => {
+    const classes = useStyles();
 
     return (
         <Router>
@@ -20,8 +27,9 @@ const InicioRecursos = () => {
             <Route path="/personas">
                 <div>
                 <Navbar />
-                <BarraBusqueda />
-                <TablaEmpleado />
+                <div className={classes.root}>
+                    <TablaEmpleado/>
+                </div>
                 </div>
             </Route>
         </Switch>
