@@ -19,6 +19,12 @@ class TaskService {
             })
             .catch((err) => {console.log('ERR', err);});
     }
+
+    static listProject() {
+        return fetch('http://psa-projects.herokuapp.com/projects')
+            .then(res => res.json())
+            .then((resp) => console.log(resp))
+    }
 }
 
 export default TaskService;

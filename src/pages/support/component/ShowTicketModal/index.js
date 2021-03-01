@@ -56,17 +56,7 @@ const ShowTicketModal = () => {
     };
 
     const handleDeleteClick = () => {
-        dispatch({ type: 'LOADING' });
-        TicketService.deleteTicket(state.actualTicket)
-            .then(() => dispatch({ type: 'CLOSE_SHOW_TICKET' }))
-            .then(() => {
-                const data = {};
-                TicketService.searchFullTicket(data)
-                    .then(result => {
-                        dispatch({ type: 'LIST_TICKETS', tickets: result.results });
-                        dispatch({ type: 'FINISH_LOADING' });
-                    });
-            });
+        dispatch({ type: 'SHOW_CONFIRMATION_MODAL' })
     };
 
     return (
