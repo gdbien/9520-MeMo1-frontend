@@ -48,11 +48,22 @@ export const initialState = {
     alert: {
         text: "",
         show: false,
-    }
+    },
+    confirmationModal: false,
 };
 
 export const reducer = (state, action) => {
     switch (action.type) {
+        case 'SHOW_CONFIRMATION_MODAL':
+            return {
+                ...state,
+                confirmationModal: true,
+            };
+        case 'CLOSE_CONFIRMATION_MODAL':
+            return {
+                ...state,
+                confirmationModal: false,
+            };
         case 'SHOW_ALERT':
             return {
                 ...state,
@@ -175,6 +186,11 @@ export const reducer = (state, action) => {
                 buttonCreateTicket: true,
             }
         }
+        case 'DISABLE_BUTTON_TO_CREATE':
+            return {
+                ...state,
+                buttonCreateTicket: false,
+            };
         case 'FINISH_CREATE_TICKET': {
             return {
                 ...state,

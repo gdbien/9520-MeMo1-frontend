@@ -12,6 +12,7 @@ import ShowTicketModal from "./component/ShowTicketModal";
 import TasksModal from "./component/TaskModal";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import ConfirmationModal from "./component/ModalConfirmation";
 import PSANavBar from './../../components/Navbar'
 
 function Alert(props) {
@@ -30,6 +31,7 @@ const SupportContainer = () => {
         <div>
             <TicketContext.Provider value={{ state, dispatch }}>
                 <PSANavBar/>
+                {state.confirmationModal && <ConfirmationModal/>}
                 {state.showCreateTask && <TasksModal/>}
                 {state.createTicket && <CreateTicketModal/>}
                 {state.showTicket && <ShowTicketModal/>}

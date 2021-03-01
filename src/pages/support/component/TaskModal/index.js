@@ -9,6 +9,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import {URL} from "../../../../Proyectos/Projects";
 import {useContext} from "react";
 import {TicketContext} from "../../reducer";
+import ResourceService from "../../service/resource";
+import TaskService from "../../service/task";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -55,8 +58,8 @@ export default function TasksModal() {
         "estimation": 0,
         "totalHours": 0,
         "tickets": [state.actualTicket["id"]],
-        "resource_id": 0,
-        "resource_name": ""
+        "resourceId": 0,
+        "resourceName": ""
     };
 
     React.useEffect(() => {
@@ -87,21 +90,30 @@ export default function TasksModal() {
         };
         console.log(requestOptions);
         fetch(URL + '/tasks', requestOptions)
-            .catch((err) => {
+            .then(() => reloadTicketInfo(state.actualTicket["id"]))
+            .catch((err) => {});
+    };
 
+    const reloadTicketInfo = (ticketId) => {
+        dispatch({ type: 'LOADING' });
+        TaskService.getTask(ticketId)
+            .then(resp => {
+                dispatch({ type: 'SET_TASK', task: resp });
+                dispatch({ type: 'CLOSE_CREATE_TASK' })
+                dispatch({ type: 'FINISH_LOADING' });
             });
-
-        handleClose();
     };
 
     const handleClose = () => {
-        dispatch({ type: 'CLOSE_CREATE_TASK' })
+        dispatch({ type: 'CLOSE_CREATE_TASK' });
     };
 
     const handleChangeSelect = (event) => {
-        new_task.resource_id = parseInt(event.target.value);
-        const pj = persons.find(p => p.numLegajo === new_task.resource_id);
-        new_task.resource_name = pj.nombre + ' ' + pj.apellido;
+        new_task.resourceId = parseInt(event.target.value);
+        const pj = persons.find(p => p.numLegajo === new_task.resourceId);
+        new_task.resourceName = pj.nombre + ' ' + pj.apellido;
+
+        console.log(new_task);
     };
 
     const handleChangeName = (event) => {
@@ -122,6 +134,7 @@ export default function TasksModal() {
 
     const handleChangeProject = (event) => {
         new_task.projectId = event.target.value;
+        console.log(new_task);
     };
 
     return (
@@ -152,7 +165,7 @@ export default function TasksModal() {
                             <InputLabel id="select-encargado"> Encargado </InputLabel>
                             <Select
                                 native
-                                value={new_task.resourceName}
+                                value={new_task.resourceId}
                                 onChange={handleChangeSelect}
                                 input={<Input id="select-encargado" />}
                             >
@@ -167,14 +180,12 @@ export default function TasksModal() {
                             <InputLabel id="select-project"> Proyecto </InputLabel>
                             <Select
                                 native
-                                value={new_task.resourceName}
+                                value={new_task.projectId}
                                 onChange={handleChangeProject}
                                 input={<Input id="select-project" />}
                             >
                                 {projects.map((project) => (
-                                    <option value={project.codeId}>
-                                        {project.name}
-                                    </option>
+                                    <MenuItem value={project.codeId}>{project.name}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>

@@ -21,17 +21,22 @@ const InputCreateTicket = () => {
     const classes = useStyles();
     const { state, dispatch } = useContext(TicketContext);
 
-    const checkCreateTicket = () => {
-        return  "title" in state.ticketToCreate &&
-            "status" in state.ticketToCreate &&
-            "severity" in state.ticketToCreate &&
-            "client_id" in state.ticketToCreate;
+    const checkCreateTicket = (ticket) => {
+        return ("title" in ticket && ticket["title"] !== "") &&
+            ("status" in ticket && ticket["status"] !== "") &&
+            ("severity" in ticket && ticket["severity"] !== "") &&
+            ("client_id" in ticket && ticket["client"] !== "");
     };
 
     const handleOnChange = (event, key) => {
         dispatch({ type: "ADD_TICKET_TO_CREATE", key: key, value: event.target.value});
-        if (checkCreateTicket()) {
+
+        const validateTicket = {...state.ticketToCreate};
+        validateTicket[key] = event.target.value;
+        if (checkCreateTicket(validateTicket)) {
             dispatch({ type: "SHOW_BUTTON_TO_CREATE" });
+        } else {
+            dispatch({ type: "DISABLE_BUTTON_TO_CREATE" });
         }
     };
 
