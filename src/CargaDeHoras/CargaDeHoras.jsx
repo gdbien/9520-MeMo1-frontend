@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import TablaRegistro from './Componentes/TablaRegistro'
 import { withRouter } from 'react-router-dom';
 import TablaDeCarga from './Componentes/TablaDeCarga';
+import PSANavBar from "../components/Navbar";
 
 const estilos = makeStyles(theme => ({
     tabla: {
@@ -20,7 +21,7 @@ const estilos = makeStyles(theme => ({
         float: 'right',
     },
     texto1: {
-        marginTop: 75,
+        marginTop: 10,
     },
     texto2: {
         marginTop: 40,
@@ -38,7 +39,7 @@ const estilos = makeStyles(theme => ({
         marginLeft: 400,
     },
     backButton: {
-        
+    
     },
 
 }))
@@ -60,7 +61,7 @@ const CargaDeHoras = (props) => {
 
     return (
         <div>
-            <Navbar/>
+            <PSANavBar/>
             <Typography variant='h5' className={classes.texto1}>
             <IconButton
                     color="inherit" 
@@ -68,7 +69,7 @@ const CargaDeHoras = (props) => {
                     className={classes.backButton} 
                     onClick={props.history.goBack}
                 >
-                    <ArrowBackIcon/>
+                    <ArrowBackIcon />
                 </IconButton>
                 Volver
             </Typography>

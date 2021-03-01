@@ -108,8 +108,12 @@ const TablaEmpleado = () => {
 
   const requestSearch = (searchedVal) => {
     const filteredRows = data.filter((row) => {
+      var splitNombre = searchedVal.toLowerCase().split(" ")[0];
+      var splitApellido = searchedVal.toLowerCase().split(" ")[1];
       return row.nombre.toLowerCase().includes(searchedVal.toLowerCase()) ||
-             row.apellido.toLowerCase().includes(searchedVal.toLowerCase()) ;
+             row.apellido.toLowerCase().includes(searchedVal.toLowerCase()) ||
+             (row.nombre.toLowerCase().includes(splitNombre) &&
+             row.apellido.toLowerCase().includes(splitApellido));
     });
     setRows(filteredRows);
   };
