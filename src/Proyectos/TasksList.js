@@ -18,6 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { URL } from './Projects'
 
 
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: "absolute",
@@ -42,7 +43,12 @@ const useStyles = makeStyles((theme) => ({
     horizontalContainer: {
         display: "flex",
         flexDirection: "row"
-    }
+    },
+    root: {
+        '& > span': {
+          margin: theme.spacing(2),
+        },
+      },
 }));
 
 
@@ -58,9 +64,8 @@ export default function TasksList(props) {
         { field: 'totalHours', headerName: 'Horas Totales', width: 170 },
         { field: 'creationDate', headerName: 'Fecha de Creacion', width: 190 },
         { field: 'projectId', headerName: 'Project ID', width: 120 },
-        { field: 'resourceName', headerName: 'Recursos', width: 150 },
+        { field: 'resourceName', headerName: 'Encargado', width: 150 },
         { field: 'tickets', headerName: 'Tickets', width: 150 },
-        { field: 'person', headerName: 'Encargado', width: 150 },
         {
             field: "edit",
             headerName: "Editar",
@@ -177,13 +182,18 @@ export default function TasksList(props) {
                     <h5 >
                         Cargando datos...
                     </h5>
-                </div>  : <div></div>
+                </div> : <div></div>
             }
-            <Container className={classes.horizontalContainer}>
+           
             <IconButton aria-label="new" className={classes.margin} onClick={() => setCreateDialog(true)}>
+            <Container className={classes.horizontalContainer}>
+                <Typography variant="h5" align="center" color="primary">
+                    Agregar tarea    
+                </Typography>
                 <AddCircleIcon fontSize="large" style={{ color: green[500] }} />
+                </Container>
             </IconButton>
-            </Container>
+            
 
             {openCreateDialog ?
                 <CreateTaskDialog projectId={props.projectId} personsLists={persons} handleExternalClose={() => setCreateDialog(false)} /> : <div> </div>
