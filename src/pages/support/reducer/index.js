@@ -12,13 +12,29 @@ export const initialState = {
         "SOLUTION_OFFERED": "SOLUCIÓN OFRECIDA",
         "RESOLVED": "RESUELTO"
     },
-    client: [],
+    client: [
+        {
+            "id": 1,
+            "razon social": "FIUBA",
+            "CUIT": "20-12345678-2"
+        },
+        {
+            "id": 2,
+            "razon social": "FSOC",
+            "CUIT": "20-12345678-5"
+        },
+        {
+            "id": 3,
+            "razon social": "Macro",
+            "CUIT": "20-12345678-3"
+        }
+    ],
     resource: null,
     tickets: [],
     filter: {
-        severity: "",
-        status: "",
-        client: "",
+        severity: "TODOS",
+        status: "TODOS",
+        client: "TODOS",
     },
     loading: false,
     createTicket: false,
@@ -28,51 +44,33 @@ export const initialState = {
     actualTicket: null,
     originalTicket: null,
     showCreateTask: false,
-    tasks: [
-        {
-            "taskId": 54,
-            "name": "Tarea de ejemplo del proyecto 50",
-            "description": "Probando integración",
-            "priority": "Ninguna",
-            "state": "NUEVA",
-            "estimation": 0,
-            "totalHours": 20,
-            "creationDate": "2021-02-20T00:55:11.000+00:00",
-            "projectId": 50,
-            "resourceLoads": [],
-            "tickets": []
-        },
-        {
-            "taskId": 67,
-            "name": "Prueba pathc",
-            "description": "esta es otra descrpicon",
-            "priority": "Media",
-            "state": "Bloqueada",
-            "estimation": 45,
-            "totalHours": 0,
-            "creationDate": "2021-02-27T00:49:56.000+00:00",
-            "projectId": 56,
-            "resourceLoads": [],
-            "tickets": []
-        },
-        {
-            "taskId": 70,
-            "name": "sfgsdfd",
-            "description": "sgsfgsfg",
-            "priority": "media",
-            "state": "EN PROGRESO",
-            "estimation": 72,
-            "totalHours": 0,
-            "creationDate": "2021-02-27T00:36:29.000+00:00",
-            "projectId": 56,
-            "resourceLoads": [],
-            "tickets": []
-        }
-    ],
+    tasks: [],
+    alert: {
+        text: "",
+        show: false,
+    }
 };
 
 export const reducer = (state, action) => {
     switch (action.type) {
+        case 'SHOW_ALERT':
+            return {
+                ...state,
+                alert: {
+                    ...state.alert,
+                    text: action.text,
+                    show: true,
+                }
+            };
+        case 'HIDE_ALERT':
+            return {
+                ...state,
+                alert: {
+                    ...state.alert,
+                    text: "",
+                    show: false,
+                }
+            };
         case 'LOADING':
             return {
                 ...state,
@@ -99,7 +97,7 @@ export const reducer = (state, action) => {
                     status: action.value,
                 }
             };
-        case 'CHANGE_PROJECT_FILTER':
+        case 'CHANGE_CLIENT_FILTER':
             return {
                 ...state,
                 filter: {
@@ -191,6 +189,17 @@ export const reducer = (state, action) => {
                 showCreateTask: true,
             }
         }
+        case 'CLOSE_CREATE_TASK': {
+            return {
+                ...state,
+                showCreateTask: false,
+            }
+        }
+        case 'SET_TASK':
+            return {
+                ...state,
+                tasks: action.task,
+            };
         default:
             return state;
     }

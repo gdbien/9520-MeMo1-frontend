@@ -1,4 +1,4 @@
-import React, {useContext, useReducer} from 'react';
+import React, {useContext} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
@@ -22,7 +22,7 @@ const useStyle = makeStyles({
 });
 
 
-const TicketFilter = () => {
+export default function TicketFilter() {
     const { state, dispatch } = useContext(TicketContext);
     const classes = useStyle();
 
@@ -34,16 +34,19 @@ const TicketFilter = () => {
         } else if (section === 'CLIENT') {
             dispatch({type: 'CHANGE_CLIENT_FILTER', value: event.target.value});
         }
+        console.log(state.filter.client);
     };
 
     const handleSearch = () => {
         dispatch({ type: 'LOADING' });
         const data = {"filters": {}};
         Object.keys(state.filter).forEach((key) => {
-            if (key === "severity" && state.filter[key] !== "") {
-                data.filters["severity_in"] = [state.filter[key]]
-            } else if (key === "status" && state.filter[key] !== "") {
-                data.filters["status_in"] = [state.filter[key]]
+            if (key === "severity" && state.filter[key] !== "TODOS") {
+                data.filters["severity_in"] = [state.filter[key]];
+            } else if (key === "status" && state.filter[key] !== "TODOS") {
+                data.filters["status_in"] = [state.filter[key]];
+            } else if (key === "client" && state.filter[key] !== "TODOS") {
+                data.filters["client_id"] = state.filter[key];
             }
         });
         TicketService.searchFullTicket(data)
@@ -62,6 +65,7 @@ const TicketFilter = () => {
                   value={state.filter.severity}
                   onChange={(e) => {handleChange(e, "PRIORITY")}}
               >
+                  <MenuItem value={"TODOS"}>{"TODOS"}</MenuItem>
                   {state.severity.map((severity) => (
                       <MenuItem value={severity}>{severity}</MenuItem>
                   ))}
@@ -74,7 +78,7 @@ const TicketFilter = () => {
                   value={state.filter.status}
                   onChange={(e) => {handleChange(e, "STATUS")}}
               >
-                  <MenuItem value={""}>{""}</MenuItem>
+                  <MenuItem value={"TODOS"}>{"TODOS"}</MenuItem>
                   {Object.keys(state.status).map((key) => (
                       <MenuItem value={key}>{state.status[key]}</MenuItem>
                   ))}
@@ -87,8 +91,9 @@ const TicketFilter = () => {
                   value={state.filter.client}
                   onChange={(e) => {handleChange(e, "CLIENT")}}
               >
+                  <MenuItem value={"TODOS"}>{"TODOS"}</MenuItem>
                   {state.client.map((client) => (
-                      <MenuItem value={client}>{client}</MenuItem>
+                      <MenuItem value={client["id"]}>{client["razon social"]}</MenuItem>
                   ))}
               </Select>
           </FormControl>
@@ -106,4 +111,3 @@ const TicketFilter = () => {
     );
 };
 
-export default TicketFilter;

@@ -21,10 +21,11 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         width: "80%",
-        justifyContent: "left"
+        justifyContent: "left",
     },
     addButton: {
-        marginLeft: "10px"
+        float: "right",
+        marginTop: "13px",
     }
 }));
 
@@ -62,17 +63,22 @@ const FullTicketInfo = () => {
                     onChange={(e) => {handleOnChange(e, "description")}}
                 />
                 <div>
-                    <h3>
-                        Tareas asociadas ({state.tasks.length})
+                    <div style={{width: "80%"}}>
+                        <div className="create-task-button">
+                            <h3>
+                                Tareas asociadas ({state["tasks"].length})
+                            </h3>
+                        </div>
                         <Button
                             variant="contained"
                             color="primary"
+                            size="small"
                             onClick={handleAddTaskClick}
                             className={classes.addButton}
                         >
-                            Agregar tarea
+                            Nueva tarea
                         </Button>
-                    </h3>
+                    </div>
                     {state.tasks.map((task) => (
                         <p>
                             <Chip className={classes.chip} label={`#${task.taskId} ${task.name}`}/>

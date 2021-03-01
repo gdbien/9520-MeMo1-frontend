@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        minHeight: "75%"
     },
     paper: {
         backgroundColor: theme.palette.background.paper,
@@ -49,9 +50,9 @@ const ShowTicketModal = () => {
                     .then(result => {
                         dispatch({ type: 'LIST_TICKETS', tickets: result.results });
                         dispatch({ type: 'FINISH_LOADING' });
+                        dispatch({ type: 'SHOW_ALERT', text: "Ticket modificado correctamente." });
                     });
             });
-
     };
 
     const handleDeleteClick = () => {
