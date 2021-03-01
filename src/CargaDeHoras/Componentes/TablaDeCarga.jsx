@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
   },
   texto: {
-    marginLeft: -10,
+    marginLeft: 150,
     marginBottom: 60,
     fontWeight: 550,
     fontSize: 18,
@@ -32,22 +32,37 @@ const useStyles = makeStyles((theme) => ({
     color: "#212121",
   },
   idSeleccionado: {
-    marginLeft: 100,
+    marginLeft: 250,
     marginTop: -90,
   },
-  texto6: {
-    marginTop: -49,
-    marginRight: -20,
-    float: 'right',
+  
+  botonConfirmar: {
+    marginTop: -20,
+    marginLeft: 180,
   },
+
+  botonLimpiar: {
+    marginTop: -68,
+    marginBottom:50,
+    marginLeft: 300 
+  },
+
+  botonEliminar: {
+    marginTop: -50,
+    marginLeft: 180
+  },
+  
   campo1: {
     marginTop: theme.spacing(-4),
-    marginLeft: theme.spacing(0),
+    marginLeft: theme.spacing(20),
   },
   campo2: {
     marginTop: theme.spacing(-7),
-    marginLeft: theme.spacing(25),
+    marginLeft: theme.spacing(45),
     width: 70,
+  },
+  alerta: {
+    marginBottom: 400
   },
 }));
 
@@ -207,8 +222,8 @@ export default function TablaDeCarga(props) {
           variant='outlined'
         />
       </div>
-      <div className={classes.texto4}>
-        <Typography component={'span'} variant='body2' >
+      <div className={classes.botonConfirmar}>
+        <Typography component="span" variant='body2' >
           <IconButton
             color="primary"
             aria-label="confirmar"
@@ -218,19 +233,19 @@ export default function TablaDeCarga(props) {
           </IconButton>
             Confirmar
           <Snackbar open={openConfirmar} autoHideDuration={6000} onClose={handleCerrarConfirmar}>
-            <Alert onClose={handleCerrarConfirmar} severity="success">
+            <Alert className={classes.alerta} onClose={handleCerrarConfirmar} severity="success">
               El registro se cargó con éxito.
             </Alert>
           </Snackbar>
           <Snackbar open={openConfirmar2} autoHideDuration={6000} onClose={handleCerrarConfirmar2}>
-            <Alert onClose={handleCerrarConfirmar2} severity="success">
+            <Alert className={classes.alerta} onClose={handleCerrarConfirmar2} severity="success">
               El registro se actualizó con éxito.
             </Alert>
           </Snackbar>
         </Typography>
       </div>
-      <div className={classes.texto6}>
-        <Typography component={'span'} variant='body2'>
+      <div className={classes.botonLimpiar}>
+        <Typography component="span" variant='body2'>
           <IconButton
             color="inherit"
             aria-label="limpiar"
@@ -241,9 +256,9 @@ export default function TablaDeCarga(props) {
             Limpiar
         </Typography>
       </div>
-      <div className={classes.texto5}>
+      <div className={classes.botonEliminar}>
         {esPatch &&
-          <Typography component={'span'} variant='body2'>
+          <Typography component="span" variant='body2'>
             <IconButton
               color="secondary"
               aria-label="eliminar"
