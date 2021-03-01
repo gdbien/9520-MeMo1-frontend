@@ -60,10 +60,8 @@ export default function CreateTaskDialog({ projectId, personsLists, handleExtern
         "totalHours": 0,
         "priority": 0,
         "state": "",
-        "resourceLoad": {
-            "name": "",
-            "id": 0
-        }
+        "resourceName":"",
+        "resourceId":""
     });
 
     const handleClose = () => {
@@ -87,9 +85,9 @@ export default function CreateTaskDialog({ projectId, personsLists, handleExtern
     }
 
     function handleChangeSelect(event) {
-        task.resourceLoad.id = parseInt(event.target.value);
-        let pj = persons.find(p => p.numLegajo === task.resourceLoad.id);
-        task.resourceLoad.name = pj.nombre + ' ' + pj.apellido;
+        task.resourceId = parseInt(event.target.value);
+        let pj = persons.find(p => p.numLegajo === task.resourceId);
+        task.resourceName = pj.nombre + ' ' + pj.apellido;
         setTask(
             task
         );
