@@ -82,6 +82,10 @@ export default function CreateTaskDialog({ projectId, personsLists, handleExtern
         window.location.reload();
     };
 
+    function updateValid(){
+        setValid(!(nameInvalid| descriptionInvalid| estimationInvalid| totalHoursInvalid| resourceInvalid| stateInvalid| priorityInvalid))
+    }
+
     function handleChangeSelect(event) {
         task.resourceLoad.id = parseInt(event.target.value);
         let pj = persons.find(p => p.numLegajo === task.resourceLoad.id);
@@ -90,10 +94,6 @@ export default function CreateTaskDialog({ projectId, personsLists, handleExtern
             task
         );
     };
-
-    function updateValid(){
-        setValid(!(nameInvalid| descriptionInvalid| estimationInvalid| totalHoursInvalid| resourceInvalid| stateInvalid| priorityInvalid))
-    }
 
     function handleChangeName(event) {
         setNameInvalid(event.target.value == "");

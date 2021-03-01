@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import DialogContent from '@material-ui/core/DialogContent';
+import FormHelperText from "@material-ui/core/FormHelperText";
 import { URL } from './Projects'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,15 @@ export default function EditTaskDialog({ currentTask, personsLists, handleExtern
     const [error, setError] = React.useState(null);
     const [task, setTask] = React.useState(currentTask);
 
+    const [valid, setValid] = React.useState(false);
+    const [nameInvalid, setNameInvalid] = React.useState(false);
+    const [descriptionInvalid, setDescriptionInvalid] = React.useState(false);
+    const [estimationInvalid, setEstimationInvalid] = React.useState(false);
+    const [totalHoursInvalid, setTotalHoursInvalid] = React.useState(false);
+    const [resourceInvalid, setResourceInvalid] = React.useState(false);
+    const [stateInvalid, setStateInvalid] = React.useState(false);
+    const [priorityInvalid, setPriorityInvalid] = React.useState(false);
+
     const handleAcceptPop = () => {
         setPopOpen(false);
         setIsLoading(true);
@@ -72,50 +82,73 @@ export default function EditTaskDialog({ currentTask, personsLists, handleExtern
         window.location.reload();
     }
 
-    function handleChangeName(e) {
-        task.name = e.target.value
-        setTask(
-            task
-        );
-    }
-
-    function handlenDescriptionChange(e) {
-        task.description = e.target.value
-        setTask(
-            task
-        );
-    }
-
-    function handleEstimationChange(e) {
-        task.estimation = e.target.value
-        setTask(
-            task
-        );
-    }
-
-    function handlePriorityChange(e) {
-        task.priority = e.target.value
-        setTask(
-            task
-        );
-    }
-
-    function handleStateChange(e) {
-        task.state = e.target.value
-        setTask(
-            task
-        );
+    function updateValid() {
+        setValid(!(nameInvalid | descriptionInvalid | estimationInvalid | totalHoursInvalid | resourceInvalid | stateInvalid | priorityInvalid))
     }
 
     function handleChangeSelect(event) {
-        task.resourceLoad = {}
-        task.resourceLoad.id = parseInt(event.target.value);
-        let pj = personsLists.find(p => p.numLegajo === task.resourceLoad.id);
-        task.resourceLoad.name = pj.nombre + ' ' + pj.apellido;
+        task.resourceId = parseInt(event.target.value);
+        let pj = personsLists.find(p => p.numLegajo === task.resourceId);
+        task.resourceName = pj.nombre + ' ' + pj.apellido;
         setTask(
             task
         );
     };
+
+    function handleChangeName(event) {
+        setNameInvalid(event.target.value == "");
+        updateValid();
+        task.name = event.target.value;
+        setTask(
+            task
+        );
+    };
+
+    function handleChangeDesc(event) {
+        setDescriptionInvalid(event.target.value == "");
+        updateValid();
+        task.description = event.target.value;
+        setTask(
+            task
+        );
+    };
+
+    function handleChangeHours(event) {
+        setTotalHoursInvalid(event.target.value == 0);
+        updateValid();
+        task.totalHours = parseInt(event.target.value);
+        setTask(
+            task
+        );
+    };
+
+    function handleChangeEs(event) {
+        setEstimationInvalid(event.target.value == 0);
+        updateValid();
+        task.estimation = parseInt(event.target.value);
+        setTask(
+            task
+        );
+    };
+
+
+    function handlePriorityChange(event) {
+        setPriorityInvalid(event.target.value == "");
+        updateValid();
+        task.priority = event.target.value
+        setTask(
+            task
+        );
+    }
+
+    function handleStateChange(event) {
+        setStateInvalid(event.target.value == "");
+        updateValid();
+        task.state = event.target.value
+        setTask(
+            task
+        );
+    }
 
     if (isLoading) {
         return (<CircularProgress />)
@@ -131,25 +164,34 @@ export default function EditTaskDialog({ currentTask, personsLists, handleExtern
                 <form className={classes.create}>
                     <FormControl className={classes.formControl}>
                         <InputLabel id="text-name"> Nombre </InputLabel>
-                        <Input autoFocus type="text" defaultValue={task.name} id="text-name" aria-describedby="name" onChange={handleChangeName} />
+                        <Input id="text-name" aria-describedby="name" defaultValue={task.name} error={nameInvalid} onChange={handleChangeName} />
+                        {nameInvalid && <FormHelperText id="my-helper-text">El nombre no puede estar vacio</FormHelperText>}
                     </FormControl>
-
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="text-description"> Descripcion </InputLabel>
-                        <Input autoFocus type="text" defaultValue={task.description} id="text-description" aria-describedby="Descripcion" onChange={handlenDescriptionChange} />
+                        <InputLabel id="text-desc"> Descripcion </InputLabel>
+                        <Input required id="text-desc" aria-describedby="desc" defaultValue={task.description} error={descriptionInvalid} onChange={handleChangeDesc} />
+                        {descriptionInvalid && <FormHelperText id="my-helper-text">La descripcion no puede estar vacia</FormHelperText>}
                     </FormControl>
-
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="text-estimation"> Estimacion (hs) </InputLabel>
-                        <Input autoFocus type="number" defaultValue={task.estimation} id="text-estimation" aria-describedby="Estimacion (hs)" onChange={handleEstimationChange} />
+                        <InputLabel id="text-total-hours"> Horas Totales </InputLabel>
+                        <Input required id="text-total-hours" aria-describedby="total-hours" defaultValue={task.totalHours}
+                            type="number" onChange={handleChangeHours} error={totalHoursInvalid} />
+                        {totalHoursInvalid && <FormHelperText id="my-helper-text">La horas totales no pueden ser cero.</FormHelperText>}
                     </FormControl>
-
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="text-estimation"> Estimacion </InputLabel>
+                        <Input required id="text-estimation" aria-describedby="estimation" defaultValue={task.estimation}
+                            type="number" onChange={handleChangeEs} error={estimationInvalid} />
+                        {estimationInvalid && <FormHelperText id="my-helper-text">La estimacion tiene que ser mayor a cero.</FormHelperText>}
+                    </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel id="select-encargado"> Encargado </InputLabel>
                         <Select
+                            required
                             native
-                            value={task.resourceName}
+                            defaultValue={task.resourceName}
                             onChange={handleChangeSelect}
+                            error={resourceInvalid}
                             input={<Input id="select-encargado" />}
                         >
                             {personsLists.map((person) => (
@@ -159,18 +201,25 @@ export default function EditTaskDialog({ currentTask, personsLists, handleExtern
                             ))}
                         </Select>
                     </FormControl>
+
                     <FormControl className={classes.formControl}>
                         <InputLabel htmlFor="age-native-simple">Estado</InputLabel>
                         <Select
                             native
-                            input={<Input id="select-state" />}
-                            value={task.state}
+                            inputProps={{
+                                name: 'state',
+                                id: 'age-native-simple',
+                            }}
+                            error={stateInvalid}
+                            defaultValue={task.state}
                             onChange={handleStateChange}
                         >
+                            <option aria-label="None" value="" />
                             <option value={"En progreso"}>En progreso</option>
                             <option value={"Bloqueada"}>Bloqueada</option>
                             <option value={"Finalizada"}>Finalizada</option>
                         </Select>
+                        {stateInvalid && <FormHelperText id="my-helper-text">Debe seleccionar un estado.</FormHelperText>}
                     </FormControl>
 
                     <FormControl className={classes.formControl}>
@@ -181,14 +230,16 @@ export default function EditTaskDialog({ currentTask, personsLists, handleExtern
                                 name: 'state',
                                 id: 'age-native-simple',
                             }}
-
-                            value={task.priority}
+                            error={priorityInvalid}
+                            defaultValue={task.priority}
                             onChange={handlePriorityChange}
                         >
+                            <option aria-label="None" value="" />
                             <option value={"Baja"}>Baja</option>
                             <option value={"Media"}>Media</option>
-                            <option value={"Alta"}>Alta</option>a
+                            <option value={"Alta"}>Alta</option>
                         </Select>
+                        {priorityInvalid && <FormHelperText id="my-helper-text">Debe seleccionar una prioridad.</FormHelperText>}
                     </FormControl>
                 </form>
             </DialogContent>

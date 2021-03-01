@@ -31,7 +31,7 @@ export default function DeleteTaskDialog({taskId, handleExternalClose}) {
                     'Access-Control-Allow-Origin':'*'
                   }
                 })
-        console.log(response)
+        
         setIsLoading(false);
         setPopOpen(false);
         window.location.reload();

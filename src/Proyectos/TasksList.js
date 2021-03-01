@@ -58,7 +58,7 @@ export default function TasksList(props) {
         { field: 'totalHours', headerName: 'Horas Totales', width: 170 },
         { field: 'creationDate', headerName: 'Fecha de Creacion', width: 190 },
         { field: 'projectId', headerName: 'Project ID', width: 120 },
-        { field: 'resources', headerName: 'Recursos', width: 150 },
+        { field: 'resourceName', headerName: 'Recursos', width: 150 },
         { field: 'tickets', headerName: 'Tickets', width: 150 },
         { field: 'person', headerName: 'Encargado', width: 150 },
         {
