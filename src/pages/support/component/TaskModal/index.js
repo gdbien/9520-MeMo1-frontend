@@ -9,84 +9,72 @@ import {makeStyles} from "@material-ui/core/styles";
 import {URL} from "../../../../Proyectos/Projects";
 import {useContext} from "react";
 import {TicketContext} from "../../reducer";
-import ResourceService from "../../service/resource";
 import TaskService from "../../service/task";
-import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: "absolute",
-        width: 500,
-        height: 500,
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
     formControl: {
-        margin: theme.spacing(1),
+        marginRight: theme.spacing(3),
+        marginLeft: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+        minWidth: 500,
+    },
+    textField: {
+        marginRight: theme.spacing(2),
+        marginLeft: theme.spacing(2),
         minWidth: 120,
     },
-    margin: {
-        margin: theme.spacing(1),
-    },
-    circularProgress: {
-        display: "flex",
-        justifyContent: "center"
+    selectEmpty: {
+        marginTop: theme.spacing(2),
     },
     create: {
         '& .MuiTextField-root': {
             margin: theme.spacing(1),
             width: '25ch',
         },
-    },
+    }
+
 }));
 
 
 export default function TasksModal() {
     const classes = useStyles();
 
-    const [persons, setPersons] = React.useState([]);
-    const [projects, setProjects] = React.useState([]);
-
     const { state, dispatch } = useContext(TicketContext);
 
-    var new_task = {
+    const [valid, setValid] = React.useState(false);
+    const [nameInvalid, setNameInvalid] = React.useState(false);
+    const [descriptionInvalid, setDescriptionInvalid] = React.useState(false);
+    const [estimationInvalid, setEstimationInvalid] = React.useState(false);
+    const [totalHoursInvalid, setTotalHoursInvalid] = React.useState(false);
+    const [resourceInvalid, setResourceInvalid] = React.useState(false);
+    const [projectInvalid, setProjectInvalid] = React.useState(false);
+    const [stateInvalid, setStateInvalid] = React.useState(false);
+    const [priorityInvalid, setPriorityInvalid] = React.useState(false);
+
+    const [task, setTask] = React.useState({
         "projectId": 0,
         "name": "",
         "description": "",
         "estimation": 0,
         "totalHours": 0,
+        "priority": 0,
+        "state": "",
         "tickets": [state.actualTicket["id"]],
-        "resourceId": 0,
-        "resourceName": ""
-    };
+        "resourceName":"",
+        "resourceId":""
+    });
 
-    React.useEffect(() => {
-        fetch('https://psa-bac-carga-de-horas.herokuapp.com/personas')
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setPersons(result);
-                }
-            )
-    }, []);
-
-    React.useEffect(() => {
-        fetch('http://psa-projects.herokuapp.com/projects')
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setProjects(result);
-                }
-            )
-    }, []);
+    function updateValid(){
+        console.log(task);
+        setValid(!(nameInvalid | descriptionInvalid | estimationInvalid | totalHoursInvalid | resourceInvalid | stateInvalid | priorityInvalid))
+    }
 
     const createNewTask = () => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(new_task)
+            body: JSON.stringify(task)
         };
         console.log(requestOptions);
         fetch(URL + '/tasks', requestOptions)
@@ -99,7 +87,7 @@ export default function TasksModal() {
         TaskService.getTask(ticketId)
             .then(resp => {
                 dispatch({ type: 'SET_TASK', task: resp });
-                dispatch({ type: 'CLOSE_CREATE_TASK' })
+                dispatch({ type: 'CLOSE_CREATE_TASK' });
                 dispatch({ type: 'FINISH_LOADING' });
             });
     };
@@ -108,99 +96,184 @@ export default function TasksModal() {
         dispatch({ type: 'CLOSE_CREATE_TASK' });
     };
 
-    const handleChangeSelect = (event) => {
-        new_task.resourceId = parseInt(event.target.value);
-        const pj = persons.find(p => p.numLegajo === new_task.resourceId);
-        new_task.resourceName = pj.nombre + ' ' + pj.apellido;
+    function handleChangeSelect(event) {
+        task.resourceId = parseInt(event.target.value);
+        let pj = state.resource.find(p => p.numLegajo === task.resourceId);
+        task.resourceName = pj.nombre + ' ' + pj.apellido;
+        setTask(task);
+    }
 
-        console.log(new_task);
-    };
+    function handleChangeName(event) {
+        setNameInvalid(event.target.value === "");
+        updateValid();
+        task.name = event.target.value;
+        setTask(task);
+    }
 
-    const handleChangeName = (event) => {
-        new_task.name = event.target.value;
-    };
+    function handleChangeDesc(event) {
+        setDescriptionInvalid(event.target.value === "");
+        updateValid();
+        task.description = event.target.value;
+        setTask(task);
+    }
 
-    const handleChangeDesc = (event) => {
-        new_task.description = event.target.value;
-    };
+    function handleChangeHours(event) {
+        setTotalHoursInvalid(event.target.value === 0);
+        updateValid();
+        task.totalHours = parseInt(event.target.value);
+        setTask(task);
+    }
 
-    const handleChangeHours = (event) => {
-        new_task.totalHours = parseInt(event.target.value);
-    };
+    function handleChangeEs(event) {
+        setEstimationInvalid(event.target.value === 0);
+        updateValid();
+        task.estimation = parseInt(event.target.value);
+        setTask(task);
+    }
 
-    const handleChangeEst = (event) => {
-        new_task.estimation = parseInt(event.target.value);
-    };
+    function handlePriorityChange(event) {
+        setPriorityInvalid(event.target.value === "");
+        updateValid();
+        task.priority = event.target.value;
+        setTask(task);
+    }
 
-    const handleChangeProject = (event) => {
-        new_task.projectId = event.target.value;
-        console.log(new_task);
-    };
+    function handleStateChange(event) {
+        setStateInvalid(event.target.value === "");
+        updateValid();
+        task.state = event.target.value;
+        setTask(task);
+    }
+
+    function handleProjectSelect(event) {
+        setProjectInvalid(event.target.value === "");
+        updateValid();
+        task.projectId = event.target.value;
+        setTask(task);
+        console.log(task);
+    }
 
     return (
         <div>
-            <Dialog disableBackdropClick disableEscapeKeyDown open={true} onClose={handleClose}>
-                <DialogTitle>Nueva Tarea</DialogTitle>
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open
+                aria-labelledby="alert-dialog-title"
+                id="createDialog">
+
+                <DialogTitle id="alert-dialog-title">{"Crear tarea"}</DialogTitle>
                 <DialogContent>
-                    <form className={classes.container}>
-                        <FormControl className={classes.formControl}>
+                    <form className={classes.create}>
+                        <FormControl required={true}  className={classes.formControl}>
                             <InputLabel id="text-name"> Nombre </InputLabel>
-                            <Input id="text-name" aria-describedby="name" onChange={handleChangeName} />
+                            <Input id="text-name" aria-describedby="name"  error={nameInvalid} onChange={handleChangeName}/>
+                            {nameInvalid && <FormHelperText id="my-helper-text">El nombre no puede estar vacio</FormHelperText>}
                         </FormControl>
-                        <FormControl className={classes.formControl}>
+                        <FormControl required={true}  className={classes.formControl}>
                             <InputLabel id="text-desc"> Descripcion </InputLabel>
-                            <Input id="text-desc" aria-describedby="desc" onChange={handleChangeDesc} />
+                            <Input required id="text-desc" aria-describedby="desc" error={descriptionInvalid} onChange={handleChangeDesc} />
+                            {descriptionInvalid && <FormHelperText id="my-helper-text">La descripcion no puede estar vacia</FormHelperText>}
                         </FormControl>
-                        <FormControl className={classes.formControl}>
+                        <FormControl required={true} className={classes.formControl}>
                             <InputLabel id="text-total-hours"> Horas Totales </InputLabel>
-                            <Input id="text-total-hours" aria-describedby="total-hours"
-                                   type="number" onChange={handleChangeHours} />
+                            <Input required id="text-total-hours" aria-describedby="total-hours"
+                                   type="number" onChange={handleChangeHours} error={totalHoursInvalid}/>
+                            {totalHoursInvalid && <FormHelperText id="my-helper-text">La horas totales no pueden ser cero.</FormHelperText>}
                         </FormControl>
-                        <FormControl className={classes.formControl}>
+                        <FormControl required={true} className={classes.formControl}>
                             <InputLabel id="text-estimation"> Estimacion </InputLabel>
-                            <Input id="text-estimation" aria-describedby="estimation"
-                                   type="number" onChange={handleChangeEst} />
+                            <Input required id="text-estimation" aria-describedby="estimation"
+                                   type="number" onChange={handleChangeEs} error={estimationInvalid} />
+                            {estimationInvalid && <FormHelperText id="my-helper-text">La estimacion tiene que ser mayor a cero.</FormHelperText>}
                         </FormControl>
-                        <FormControl className={classes.formControl}>
+                        <FormControl required={true} className={classes.formControl}>
                             <InputLabel id="select-encargado"> Encargado </InputLabel>
                             <Select
+                                required
                                 native
-                                value={new_task.resourceId}
+                                value={task.resourceId}
                                 onChange={handleChangeSelect}
-                                input={<Input id="select-encargado" />}
+                                error={resourceInvalid}
                             >
-                                {persons.map((person) => (
-                                    <option value={person.numLegajo}>
-                                        {person.nombre + ' ' + person.apellido}
+                                {state.resource.map((resource) => (
+                                    <option value={resource.numLegajo}>
+                                        {resource.nombre + ' ' + resource.apellido}
                                     </option>
                                 ))}
                             </Select>
                         </FormControl>
-                        <FormControl className={classes.formControl}>
+
+                        <FormControl required={true} className={classes.formControl}>
                             <InputLabel id="select-project"> Proyecto </InputLabel>
                             <Select
+                                required
                                 native
-                                value={new_task.projectId}
-                                onChange={handleChangeProject}
+                                value={projectInvalid}
+                                onChange={handleProjectSelect}
+                                error={resourceInvalid}
                                 input={<Input id="select-project" />}
                             >
-                                {projects.map((project) => (
-                                    <MenuItem value={project.codeId}>{project.name}</MenuItem>
+                                {state.project.map((project) => (
+                                    <option value={project["codeId"]}>
+                                        {project.name}
+                                    </option>
                                 ))}
                             </Select>
+                        </FormControl>
+
+                        <FormControl required={true} className={classes.formControl}>
+                            <InputLabel htmlFor="age-native-simple">Estado</InputLabel>
+                            <Select
+                                native
+                                inputProps={{
+                                    name: 'state',
+                                    id: 'age-native-simple',
+                                }}
+                                error={stateInvalid}
+                                onChange={handleStateChange}
+                            >
+                                <option aria-label="None" value="" />
+                                <option value={"En progreso"}>En progreso</option>
+                                <option value={"Bloqueada"}>Bloqueada</option>
+                                <option value={"Finalizada"}>Finalizada</option>
+                            </Select>
+                            {stateInvalid && <FormHelperText id="my-helper-text">Debe seleccionar un estado.</FormHelperText>}
+                        </FormControl>
+
+                        <FormControl required={true} className={classes.formControl}>
+                            <InputLabel htmlFor="age-native-simple">Prioridad</InputLabel>
+                            <Select
+                                native
+                                inputProps={{
+                                    name: 'state',
+                                    id: 'age-native-simple',
+                                }}
+                                error={priorityInvalid}
+                                onChange={handlePriorityChange}
+                            >
+                                <option aria-label="None" value="" />
+                                <option value={"Baja"}>Baja</option>
+                                <option value={"Media"}>Media</option>
+                                <option value={"Alta"}>Alta</option>
+                            </Select>
+                            {priorityInvalid && <FormHelperText id="my-helper-text">Debe seleccionar una prioridad.</FormHelperText>}
                         </FormControl>
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
+                    <Button onClick={handleClose} color="secondary" variant="contained">
+                        Cancelar
                     </Button>
-                    <Button onClick={createNewTask} color="primary">
-                        Ok
+                    <Button onClick={() => {
+                        if (valid) {createNewTask();}}}
+                            color="primary"
+                            variant="contained"
+                            disabled={!valid}>
+                        Crear tarea
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
-    );
+        </div>);
 };
 

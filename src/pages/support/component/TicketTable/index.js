@@ -83,6 +83,8 @@ const TicketTable = () => {
                 .then((resp) => {
                     dispatch({ type: 'SET_CLIENT', client: resp });
                 }))
+            .then(TaskService.listProject()
+                .then(resp => dispatch({ task: 'SET_PROJECT', project: resp })))
             .then(() => {
                 dispatch({ type: 'FINISH_LOADING' });
                 dispatch({ type: 'CREATE_TICKET' })

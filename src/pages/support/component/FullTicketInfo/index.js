@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DateFnsUtils from '@date-io/date-fns'
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import {TicketContext} from "../../reducer";
+import TaskService from "../../service/task";
 
 const useStyles = makeStyles((theme) => ({
     input: {
@@ -38,7 +39,7 @@ const FullTicketInfo = () => {
     };
 
     const handleAddTaskClick = () => {
-        dispatch({ type: 'SHOW_CREATE_TASK' })
+        dispatch({ type: 'SHOW_CREATE_TASK' });
     };
 
     return (

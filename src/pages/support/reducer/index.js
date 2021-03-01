@@ -29,7 +29,7 @@ export const initialState = {
             "CUIT": "20-12345678-3"
         }
     ],
-    resource: null,
+    resource: [],
     tickets: [],
     filter: {
         severity: "TODOS",
@@ -45,6 +45,40 @@ export const initialState = {
     originalTicket: null,
     showCreateTask: false,
     tasks: [],
+    task: {
+        "projectId": 0,
+        "name": "",
+        "description": "",
+        "estimation": 0,
+        "totalHours": 0,
+        "priority": 0,
+        "state": "",
+        "resourceName":"",
+        "resourceId":""
+    },
+    project: [
+        {
+            "codeId": 1,
+            "name": "PSA-BAC",
+            "state": "EN PROGRESO",
+            "creationDate": "2021-03-01",
+            "owner": ""
+        },
+        {
+            "codeId": 4,
+            "name": "ERP Cloud",
+            "state": "NUEVO",
+            "creationDate": "2021-03-01",
+            "owner": "Tomás Brunellechi"
+        },
+        {
+            "codeId": 5,
+            "name": "Project X",
+            "state": "NUEVO",
+            "creationDate": "2021-03-01",
+            "owner": "Gabriel Batistuta"
+        }
+    ],
     alert: {
         text: "",
         show: false,
@@ -215,6 +249,11 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 tasks: action.task,
+            };
+        case 'SET_PROJECT':
+            return {
+                ...state,
+                project: action.project,
             };
         default:
             return state;
