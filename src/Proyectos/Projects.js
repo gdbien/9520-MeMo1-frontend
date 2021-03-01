@@ -12,7 +12,7 @@ function Projects() {
             <PSANavBar/>
             <Container maxWidth="sm">
                 <Typography variant="h3" gutterBottom align="center" color="primary">
-                    Project List
+                    Lista de Proyectos
                 </Typography>
             </Container>
             <Container fixed>
