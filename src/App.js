@@ -6,6 +6,7 @@ import InicioRecursos from "./CargaDeHoras/InicioRecursos";
 
 // Pages
 import SupportContainer from "./pages/support";
+import PSANavBar from "./components/Navbar";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <Route path="/tasks/:projectId" component={Tasks}>
         </Route>
         <Route path="/">
-          <h1> Home </h1>
+          <PSANavBar/>
         </Route>
       </Switch>
     </Router>

@@ -41,17 +41,18 @@ const InputCreateTicket = () => {
                 <TextField
                     required
                     id="standard-required"
-                    label="Obligatorio"
-                    defaultValue="Título"
+                    label="Título"
+                    defaultValue=""
                     className={classes.input}
                     onChange={(e) => {handleOnChange(e, "title")}}
                 />
+                <FormHelperText>Obligatorio</FormHelperText>
                 <TextField
                     id="outlined-multiline-static"
                     className={classes.input}
                     label="Descripción"
                     multiline
-                    rows={13}
+                    rows={10}
                     variant="outlined"
                     onChange={(e) => {handleOnChange(e, "description")}}
                 />

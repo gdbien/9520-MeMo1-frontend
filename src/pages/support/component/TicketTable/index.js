@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import { TicketContext } from "../../reducer";
 import ResourceService from "../../service/resource";
 import ClientService from "../../service/client";
+import TaskService from "../../service/task";
 
 const useRowStyles = makeStyles({
     root: {
@@ -42,9 +43,14 @@ function Row(props) {
         ResourceService.listResource()
             .then((resp) => {
                 dispatch({ type: 'SET_RESOURCE', resource: resp });
-                dispatch({ type: 'FINISH_LOADING' });
-                dispatch({ type: 'SHOW_TICKET', actualTicket: showTicket, originalTicket: {...showTicket} });
-            });
+            })
+            .then(TaskService.getTask(id)
+                .then(resp => {
+                    dispatch({ type: 'SET_TASK', task: resp })
+                    dispatch({ type: 'FINISH_LOADING' });
+                    dispatch({ type: 'SHOW_TICKET', actualTicket: showTicket, originalTicket: {...showTicket} });
+                })
+            );
     };
 
     return (

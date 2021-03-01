@@ -12,13 +12,29 @@ export const initialState = {
         "SOLUTION_OFFERED": "SOLUCIÓN OFRECIDA",
         "RESOLVED": "RESUELTO"
     },
-    client: [],
+    client: [
+        {
+            "id": 1,
+            "razon social": "FIUBA",
+            "CUIT": "20-12345678-2"
+        },
+        {
+            "id": 2,
+            "razon social": "FSOC",
+            "CUIT": "20-12345678-5"
+        },
+        {
+            "id": 3,
+            "razon social": "Macro",
+            "CUIT": "20-12345678-3"
+        }
+    ],
     resource: null,
     tickets: [],
     filter: {
-        severity: "",
-        status: "",
-        client: "",
+        severity: "TODOS",
+        status: "TODOS",
+        client: "TODOS",
     },
     loading: false,
     createTicket: false,
@@ -26,11 +42,35 @@ export const initialState = {
     buttonCreateTicket: false,
     showTicket: false,
     actualTicket: null,
-    originalTicket: null
+    originalTicket: null,
+    showCreateTask: false,
+    tasks: [],
+    alert: {
+        text: "",
+        show: false,
+    }
 };
 
 export const reducer = (state, action) => {
     switch (action.type) {
+        case 'SHOW_ALERT':
+            return {
+                ...state,
+                alert: {
+                    ...state.alert,
+                    text: action.text,
+                    show: true,
+                }
+            };
+        case 'HIDE_ALERT':
+            return {
+                ...state,
+                alert: {
+                    ...state.alert,
+                    text: "",
+                    show: false,
+                }
+            };
         case 'LOADING':
             return {
                 ...state,
@@ -57,7 +97,7 @@ export const reducer = (state, action) => {
                     status: action.value,
                 }
             };
-        case 'CHANGE_PROJECT_FILTER':
+        case 'CHANGE_CLIENT_FILTER':
             return {
                 ...state,
                 filter: {
@@ -143,6 +183,23 @@ export const reducer = (state, action) => {
                 ticketToCreate: {"description": "", "status": "OPEN"},
             }
         }
+        case 'SHOW_CREATE_TASK': {
+            return {
+                ...state,
+                showCreateTask: true,
+            }
+        }
+        case 'CLOSE_CREATE_TASK': {
+            return {
+                ...state,
+                showCreateTask: false,
+            }
+        }
+        case 'SET_TASK':
+            return {
+                ...state,
+                tasks: action.task,
+            };
         default:
             return state;
     }

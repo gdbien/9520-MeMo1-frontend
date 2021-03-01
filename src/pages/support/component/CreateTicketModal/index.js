@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 0, 2, 9),
         width: "70%",
-        height: "70%"
+        minHeight: "70%"
     },
     button: {
         float: "right",
@@ -48,6 +48,7 @@ const CreateTicketModal = () => {
                     .then(result => {
                         dispatch({ type: 'LIST_TICKETS', tickets: result.results });
                         dispatch({ type: 'FINISH_LOADING' });
+                        dispatch({ type: 'SHOW_ALERT', text: "Ticket creado correctamente." });
                     });
             });
     };
