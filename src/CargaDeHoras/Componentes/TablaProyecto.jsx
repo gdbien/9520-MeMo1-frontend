@@ -41,7 +41,7 @@ const useStyles = makeStyles({
   },
 });
 
-const StyledTableCell = withStyles((theme) => ({
+/*const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.common.black,
@@ -49,7 +49,7 @@ const StyledTableCell = withStyles((theme) => ({
   body: {
     fontSize: 14,
   },
-}))(TableCell);
+}))(TableCell);*/
 
 
 const TablaProyecto = (props) => {
@@ -100,13 +100,13 @@ const TablaProyecto = (props) => {
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <StyledTableCell
+                <TableCell
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
                 >
                   {column.label}
-                </StyledTableCell>
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
