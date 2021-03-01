@@ -2,15 +2,15 @@ import React from "react";
 import Typography from '@material-ui/core/Typography';
 import {Container, CssBaseline} from "@material-ui/core";
 import TasksList from "./TasksList";
+import PSANavBar from "../components/Navbar";
 
-
-export default function Tasks(props) {
+function Tasks(props) {
 
     return (
         <React.Fragment>
-            <CssBaseline />
+            <PSANavBar />
             <Container maxWidth="sm">
-                <Typography variant="h2" gutterBottom align="center" color="primary">
+                <Typography variant="h3" gutterBottom align="center" color="primary">
                     Listado de Tareas
                 </Typography>
             </Container>
@@ -20,3 +20,5 @@ export default function Tasks(props) {
         </React.Fragment>
     );
 }
+
+export default Tasks;

@@ -9,6 +9,7 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Button from "@material-ui/core/Button"
 import { green } from "@material-ui/core/colors";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteTaskDialog from "./DeleteTaskDialog";
@@ -63,7 +64,6 @@ export default function TasksList(props) {
         { field: 'estimation', headerName: 'Estimacion', width: 170 },
         { field: 'totalHours', headerName: 'Horas Totales', width: 170 },
         { field: 'creationDate', headerName: 'Fecha de Creacion', width: 190 },
-        { field: 'projectId', headerName: 'Project ID', width: 120 },
         { field: 'resourceName', headerName: 'Encargado', width: 150 },
         { field: 'tickets', headerName: 'Tickets', width: 150 },
         {
@@ -171,7 +171,7 @@ export default function TasksList(props) {
         <React.Fragment>
             <CssBaseline />
             <Container maxWidth="sm">
-                <Typography variant="h4" align="center" color="secondary">
+                <Typography variant="h5" align="center" color="secondary">
                     {name}
                 </Typography>
             </Container>
@@ -184,16 +184,13 @@ export default function TasksList(props) {
                     </h5>
                 </div> : <div></div>
             }
-           
-            <IconButton aria-label="new" className={classes.margin} onClick={() => setCreateDialog(true)}>
-            <Container className={classes.horizontalContainer}>
-                <Typography variant="h5" align="center" color="primary">
-                    Agregar tarea    
-                </Typography>
-                <AddCircleIcon fontSize="large" style={{ color: green[500] }} />
-                </Container>
-            </IconButton>
-            
+            <Button style={{ color: green[500] }} 
+                    className={classes.margin}
+                    endIcon={<AddCircleIcon
+                    fontSize="large" />}
+                    onClick={() => setCreateDialog(true)}>
+                        Nueva tarea
+            </Button>
 
             {openCreateDialog ?
                 <CreateTaskDialog projectId={props.projectId} personsLists={persons} handleExternalClose={() => setCreateDialog(false)} /> : <div> </div>
