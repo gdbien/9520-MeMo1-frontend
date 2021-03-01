@@ -33,6 +33,7 @@ const CreateTicketModal = () => {
     const { state, dispatch } = useContext(TicketContext);
 
     const handleClose = () => {
+        dispatch({ type: 'DISABLE_BUTTON_TO_CREATE' });
         dispatch({ type: 'CLOSE_CREATE_TICKET' });
     };
 
