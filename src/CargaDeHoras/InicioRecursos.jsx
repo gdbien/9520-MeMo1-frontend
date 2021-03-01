@@ -5,10 +5,12 @@ import Empleado from './Empleado'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CargaDeHoras from './CargaDeHoras';
 import { makeStyles } from '@material-ui/core/styles';
+import PSANavBar from "../components/Navbar";
+
 
 const useStyles = makeStyles({
     root: {
-      marginTop: 150,
+      marginTop: 50,
     },
   });
 
@@ -26,7 +28,7 @@ const InicioRecursos = () => {
             </Route>
             <Route path="/personas">
                 <div>
-                <Navbar />
+                <PSANavBar />
                 <div className={classes.root}>
                     <TablaEmpleado/>
                 </div>
