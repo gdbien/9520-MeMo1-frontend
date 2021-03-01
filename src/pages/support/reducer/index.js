@@ -167,6 +167,7 @@ export const reducer = (state, action) => {
                 ...state,
                 showTicket: false,
                 actualTicket: null,
+                originalTicket: null,
             };
         case 'CREATE_TICKET':
             return {
