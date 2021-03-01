@@ -187,7 +187,7 @@ export default function CreateTaskDialog({ projectId, personsLists, handleExtern
                             <Select
                                 required
                                 native
-                                value={resourceInvalid}
+                                defaultValue={task.resourceName}
                                 onChange={handleChangeSelect}
                                 error={resourceInvalid}
                                 input={<Input id="select-encargado" />}
@@ -198,25 +198,6 @@ export default function CreateTaskDialog({ projectId, personsLists, handleExtern
                                     </option>
                                 ))}
                             </Select>
-                        </FormControl>
-
-                        <FormControl required={true} className={classes.formControl}>
-                            <InputLabel htmlFor="age-native-simple">Estado</InputLabel>
-                            <Select
-                                native
-                                inputProps={{
-                                    name: 'state',
-                                    id: 'age-native-simple',
-                                }}
-                                error={stateInvalid}
-                                onChange={handleStateChange}
-                            >
-                                <option aria-label="None" value="" />
-                                <option value={"En progreso"}>En progreso</option>
-                                <option value={"Bloqueada"}>Bloqueada</option>
-                                <option value={"Finalizada"}>Finalizada</option>
-                            </Select>
-                            {stateInvalid && <FormHelperText id="my-helper-text">Debe seleccionar un estado.</FormHelperText>}
                         </FormControl>
 
                         <FormControl required={true} className={classes.formControl}>
