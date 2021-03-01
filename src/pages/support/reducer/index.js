@@ -178,6 +178,7 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 createTicket: false,
+                ticketToCreate: {"description": "", "status": "OPEN"},
             };
         case 'CHANGE_TICKET':
             return {
